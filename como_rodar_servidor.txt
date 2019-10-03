@@ -1,0 +1,2 @@
+Primeiro entre no CMD depois caminhe até a pasta atraves do comando "cd"
+Segundo digite "node index"

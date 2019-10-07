@@ -2,51 +2,89 @@ package com.slimeIdle;
 
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input;
-import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.slimeIdle.Controller.CommonLogin;
+import com.slimeIdle.Controller.FacebookLogin;
+import com.slimeIdle.Controller.InputListener;
+import com.slimeIdle.Controller.Loader;
+import com.slimeIdle.Controller.PurchaseObserver;
+import com.slimeIdle.Controller.TouchScreen;
+import com.slimeIdle.Model.Account;
+import com.slimeIdle.Model.Buttons;
+import com.slimeIdle.Model.Cart;
+import com.slimeIdle.Model.Coin;
+import com.slimeIdle.Model.Encryption;
+import com.slimeIdle.Model.Font;
+import com.slimeIdle.Model.Item;
+import com.slimeIdle.Model.Menu;
+import com.slimeIdle.Model.PurchaseManager;
+import com.slimeIdle.Model.Shop;
+import com.slimeIdle.Model.SocketSlime;
+import com.slimeIdle.Model.Static;
+import com.slimeIdle.Model.TopLevel;
+import com.slimeIdle.Model.Window;
+import com.slimeIdle.View.Render;
+import com.slimeIdle.View.RenderCart;
+import com.slimeIdle.View.RenderCoin;
+import com.slimeIdle.View.RenderItems;
+import com.slimeIdle.View.RenderLoginScreen;
+import com.slimeIdle.View.RenderMenssages;
+import com.slimeIdle.View.RenderTopLevel;
 
 public class Slime extends ApplicationAdapter {
 
-	VariablesDeclaration vd = new VariablesDeclaration();
+	Account account = new Account();
+	com.slimeIdle.Model.Slime slime = new com.slimeIdle.Model.Slime();
+	Coin coin = new Coin();
+	Shop shop = new Shop();
+	TopLevel topLevel = new TopLevel();
+	Menu menu = new Menu();
+	Item item = new Item();
+	Encryption encryption = new Encryption();
+	Buttons btns = new Buttons();
+	PurchaseManager purchaseManager = new PurchaseManager();
+	Font font = new Font();
+	Window window = new Window();
+	Cart cart = new Cart();
+	RenderItems renderItems = new RenderItems(slime,topLevel,shop);
 
-    SocketSlime socketSlime = new SocketSlime(vd);
-    FacebookLogin fbLogin = new FacebookLogin(vd, socketSlime);
-    CommonLogin cmLogin = new CommonLogin(vd, socketSlime);
-    InputListener listener = new InputListener(vd);
-    TouchScreen touchScreen = new TouchScreen(vd, socketSlime, fbLogin, listener);
+    SocketSlime socketSlime = new SocketSlime(account, slime,coin,shop, topLevel,menu,item, encryption);
+    FacebookLogin fbLogin = new FacebookLogin(account, socketSlime, encryption);
+    CommonLogin cmLogin = new CommonLogin(account, socketSlime, encryption);
+    InputListener listener = new InputListener(account,item,encryption);
+    TouchScreen touchScreen = new TouchScreen(menu,account, btns, socketSlime, fbLogin, listener, item, slime, shop, purchaseManager, topLevel, coin, encryption);
 
 	// renders
-	Render render = new Render(vd);
-	Loader loader = new Loader(vd, render);
-	RenderMenssages renderMenssages = new RenderMenssages(vd);
-	RenderCart renderCart = new RenderCart(vd, render, renderMenssages);
-	RenderCoin renderCoin = new RenderCoin(vd, render, renderMenssages);
-	RenderTopLevel renderTopLevel = new RenderTopLevel(vd,render);
-	RenderLoginScreen renderLoginScreen = new RenderLoginScreen(vd,render,renderMenssages);
+	Render render = new Render(btns, account, font, slime, coin);
+	Loader loader = new Loader(btns, render, account,window,slime,cart,coin,topLevel,menu,shop,font);
+	RenderMenssages renderMenssages = new RenderMenssages(window, font, btns);
+	RenderCart renderCart = new RenderCart(menu, shop, render, renderMenssages, item, slime, btns, coin);
+	RenderCoin renderCoin = new RenderCoin(btns, render, renderMenssages, coin);
+	RenderTopLevel renderTopLevel = new RenderTopLevel(menu,render, topLevel, btns, slime, shop,renderItems);
+	RenderLoginScreen renderLoginScreen = new RenderLoginScreen(account,render,renderMenssages, btns);
 
 	
 	@Override
 	public void create () {
 		//Gdx.input.setInputProcessor(this);
 		Gdx.input.setCatchBackKey(true);
-		vd.purchaseManager.install(new PurchaseObserver(socketSlime), vd.pmc, true);
+		purchaseManager.purchaseManager.install(new PurchaseObserver(socketSlime), purchaseManager.pmc, true);
 
-		vd.addCreateAccountStrings();
+		account.addCreateAccountStrings();
 
 		/* create preferences to store autologin options */
-		vd.setPrefs(Gdx.app.getPreferences("gdx-facebook-app-data.txt"));
-		vd.permissionsRead();
+		account.setPrefs(Gdx.app.getPreferences("gdx-facebook-app-data.txt"));
+		account.permissionsRead();
 
-		vd.w = Gdx.graphics.getWidth();
-		vd.h = Gdx.graphics.getHeight();
-		vd.camera = new OrthographicCamera(vd.w, vd.h);
-		vd.camera.position.set(vd.w/2, vd.h/2, 0);
-		vd.camera.update();
+		Static.w = Gdx.graphics.getWidth();
+		Static.h = Gdx.graphics.getHeight();
+		Static.camera = new OrthographicCamera(Static.w, Static.h);
+		Static.camera.position.set(Static.w/2, Static.h/2, 0);
+		Static.camera.update();
 
-		vd.batch = new SpriteBatch();
+		Static.batch = new SpriteBatch();
 
 		loader.getTextures();
 		loader.getButtons();
@@ -61,15 +99,15 @@ public class Slime extends ApplicationAdapter {
 
 	@Override
 	public void pause () {
-		if(vd.isLogin()){
-			vd.loginPause = true;
+		if(account.isLogin()){
+			account.loginPause = true;
 		}
 	}
 
 	@Override
 	public void resume () {
-		if(vd.loginPause){
-			vd.setLogin(true);
+		if(account.loginPause){
+			account.setLogin(true);
 		}
 	}
 
@@ -78,57 +116,57 @@ public class Slime extends ApplicationAdapter {
 
 		Gdx.gl.glClearColor(0.5f, 0.5f, 0.5f, 0);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-		vd.batch.begin();
+		Static.batch.begin();
 
-		vd.getPrefs().putBoolean("autosignin", true);
-		vd.getPrefs().flush();
+		account.getPrefs().putBoolean("autosignin", true);
+		account.getPrefs().flush();
 
 		fbLogin.getAutoLogin();
 		cmLogin.getAutoLogin();
 
-		if(vd.isLogin() || vd.loginPause == true) {
-            if(vd.getNickname().isEmpty() || vd.isSetNicknameSuccess() || vd.isSetNicknameError()) {
+		if(account.isLogin() || account.loginPause == true) {
+            if(account.getNickname().isEmpty() || account.isSetNicknameSuccess() || account.isSetNicknameError()) {
                 //vd.batch.draw(vd.background_menu, 1, 1);
-                vd.closeWindowBtn.draw(vd.batch);
+                btns.closeWindowBtn.draw(Static.batch);
 
-                if(!vd.isSetNicknameSuccess() && !vd.isSetNicknameError()) {
+                if(!account.isSetNicknameSuccess() && !account.isSetNicknameError()) {
 
                 	render.titleScreen("Your Nickname");
 
-					vd.itemMenuBtns.get(1).draw(vd.batch);
-					render.itemMenuBtnsSimpleText1(vd.createAccountStrings.get(1));
+					btns.itemMenuBtns.get(1).draw(Static.batch);
+					render.itemMenuBtnsSimpleText1(account.createAccountStrings.get(1));
 
-					vd.itemMenuBtns.get(2).draw(vd.batch);
+					btns.itemMenuBtns.get(2).draw(Static.batch);
 					render.itemMenuBtnsSimpleText2("Ok");
 
 				}
 
-				if(vd.isSetNicknameError()){
+				if(account.isSetNicknameError()){
                 	renderMenssages.messageError("Error at", "choose nickname");
 				}
 
-				if(vd.isSetNicknameSuccess()){
+				if(account.isSetNicknameSuccess()){
                 	renderMenssages.messageSuccess("Successfully", "nickname chosen");
 				}
 
             } else {
 
-                if (vd.isConectado()) {
+                if (account.isConectado()) {
 
                     //vd.renderItemsShopSprites();
 
-                    if (vd.isMenu()) {
+                    if (menu.isMenu()) {
                         //vd.batch.draw(vd.background_menu, 1, 1);
-                        if (!vd.isMenu_item_BuySuccess() && !vd.isMenu_item_BuyError_ready() && !vd.isMenu_item_BuyError_money()) {
-                            vd.closeWindowBtn.draw(vd.batch);
+                        if (!menu.isMenu_item_BuySuccess() && !menu.isMenu_item_BuyError_ready() && !menu.isMenu_item_BuyError_money()) {
+                            btns.closeWindowBtn.draw(Static.batch);
                         }
-                        if (vd.isMenu_cart()) {
+                        if (menu.isMenu_cart()) {
                             renderCart.render();
                         }
-                        if (vd.isMenu_coin()) {
+                        if (menu.isMenu_coin()) {
                             renderCoin.render();
                         }
-                        if (vd.isMenu_topLevel()) {
+                        if (menu.isMenu_topLevel()) {
                             renderTopLevel.render();
                         }
                     } else {
@@ -136,31 +174,31 @@ public class Slime extends ApplicationAdapter {
 						render.nicknameLevelAndTimer();
 
                         //slime
-                        vd.slimeSpr.draw(vd.batch);
+                        slime.slimeSpr.draw(Static.batch);
 
-                        if (vd.getItemEquippedId() != 0 && vd.itemsShopSprites.size() != 0) {
-                            vd.renderItemsEquipped(true);
+                        if (slime.getItemEquippedId() != 0 && shop.itemsShopSprites.size() != 0) {
+                            renderItems.renderItemsEquipped(true);
                         }
 
-                        vd.closeWindowBtn.draw(vd.batch);
+                        btns.closeWindowBtn.draw(Static.batch);
 
-                        vd.cartBtn.draw(vd.batch);
-                        vd.coinBtn.draw(vd.batch);
-                        vd.topLevelBtn.draw(vd.batch);
+                        btns.cartBtn.draw(Static.batch);
+                        btns.coinBtn.draw(Static.batch);
+                        btns.topLevelBtn.draw(Static.batch);
 
-                        if(vd.freeCoin){
+                        if(coin.freeCoin){
 							render.addFreeCoin();
 						}
 
                     }
 
                 } else {
-                    vd.reconnectWindowSpr.draw(vd.batch);
+                    window.reconnectWindowSpr.draw(Static.batch);
                 }
             }
 		} else {
 
-			if (vd.isLoginScreen()) {
+			if (account.isLoginScreen()) {
 				renderLoginScreen.render();
 			} else {
 
@@ -168,21 +206,30 @@ public class Slime extends ApplicationAdapter {
 				render.titleGame("Slime Idle");
 
 				//slime
-				vd.slimeSpr.draw(vd.batch);
+				slime.slimeSpr.draw(Static.batch);
 
 				// buttons
-				vd.itemMenuBtns.get(4).draw(vd.batch);
+				btns.itemMenuBtns.get(4).draw(Static.batch);
 				render.itemMenuBtnsSimpleText4("Login");
 
-				vd.loginButtonBtn.draw(vd.batch);
+				btns.loginButtonBtn.draw(Static.batch);
 			}
 		}
 
-		vd.batch.end();
+		Static.batch.end();
 	}
 	
 	@Override
 	public void dispose () {
-		vd.variablesDispose();
+		btns.dispose();
+		window.dispose();
+		cart.dispose();
+		coin.dispose();
+		topLevel.dispose();
+		Static.dispose();
+		slime.dispose();
+		font.dispose();
+		purchaseManager.dispose();
+
 	}
 }

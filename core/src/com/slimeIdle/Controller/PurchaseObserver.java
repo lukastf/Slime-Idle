@@ -1,6 +1,7 @@
-package com.slimeIdle;
+package com.slimeIdle.Controller;
 
 import com.badlogic.gdx.pay.Transaction;
+import com.slimeIdle.Model.SocketSlime;
 
 
 public class PurchaseObserver implements com.badlogic.gdx.pay.PurchaseObserver {

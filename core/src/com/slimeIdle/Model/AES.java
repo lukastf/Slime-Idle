@@ -1,4 +1,4 @@
-package com.slimeIdle;
+package com.slimeIdle.Model;
 
 import javax.crypto.Cipher;
 import javax.crypto.SecretKey;
@@ -7,7 +7,7 @@ import javax.crypto.spec.SecretKeySpec;
 import javax.xml.bind.DatatypeConverter;
 import java.nio.charset.StandardCharsets;
 
-class AES
+public class AES
 {
     public AES()
     {

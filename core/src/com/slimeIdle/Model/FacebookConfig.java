@@ -1,4 +1,4 @@
-package com.slimeIdle;
+package com.slimeIdle.Model;
 
 import de.tomgrill.gdxfacebook.core.GDXFacebookConfig;
 

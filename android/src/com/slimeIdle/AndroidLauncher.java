@@ -8,6 +8,7 @@ import com.badlogic.gdx.pay.Offer;
 import com.badlogic.gdx.pay.OfferType;
 import com.badlogic.gdx.pay.PurchaseManagerConfig;
 import com.badlogic.gdx.pay.android.googlebilling.PurchaseManagerGoogleBilling;
+import com.slimeIdle.Model.PurchaseManager;
 
 public class AndroidLauncher extends AndroidApplication {
 	@Override
@@ -15,13 +16,14 @@ public class AndroidLauncher extends AndroidApplication {
 		super.onCreate(savedInstanceState);
 		AndroidApplicationConfiguration config = new AndroidApplicationConfiguration();
 		Slime slime = new Slime();
-		slime.vd.purchaseManager = new PurchaseManagerGoogleBilling(this);
-		slime.vd.pmc = new PurchaseManagerConfig();
-		slime.vd.pmc.addOffer(new Offer().setType(OfferType.CONSUMABLE).setIdentifier("1"));
-		slime.vd.pmc.addOffer(new Offer().setType(OfferType.CONSUMABLE).setIdentifier("2"));
-		slime.vd.pmc.addOffer(new Offer().setType(OfferType.CONSUMABLE).setIdentifier("3"));
-		slime.vd.pmc.addOffer(new Offer().setType(OfferType.CONSUMABLE).setIdentifier("4"));
-		slime.vd.pmc.addOffer(new Offer().setType(OfferType.CONSUMABLE).setIdentifier("5"));
+		PurchaseManager purchaseManager = new PurchaseManager();
+		slime.purchaseManager.purchaseManager = new PurchaseManagerGoogleBilling(this);
+		slime.purchaseManager.pmc = new PurchaseManagerConfig();
+		slime.purchaseManager.pmc.addOffer(new Offer().setType(OfferType.CONSUMABLE).setIdentifier("1"));
+		slime.purchaseManager.pmc.addOffer(new Offer().setType(OfferType.CONSUMABLE).setIdentifier("2"));
+		slime.purchaseManager.pmc.addOffer(new Offer().setType(OfferType.CONSUMABLE).setIdentifier("3"));
+		slime.purchaseManager.pmc.addOffer(new Offer().setType(OfferType.CONSUMABLE).setIdentifier("4"));
+		slime.purchaseManager.pmc.addOffer(new Offer().setType(OfferType.CONSUMABLE).setIdentifier("5"));
 		initialize(slime, config);
 	}
 }

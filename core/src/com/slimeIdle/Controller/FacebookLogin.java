@@ -1,7 +1,12 @@
-package com.slimeIdle;
+package com.slimeIdle.Controller;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.utils.JsonValue;
+import com.slimeIdle.Model.Account;
+import com.slimeIdle.Model.Encryption;
+import com.slimeIdle.Model.FacebookConfig;
+import com.slimeIdle.Model.SocketSlime;
+import com.slimeIdle.Slime;
 
 import de.tomgrill.gdxfacebook.core.GDXFacebookCallback;
 import de.tomgrill.gdxfacebook.core.GDXFacebookError;
@@ -14,15 +19,17 @@ import de.tomgrill.gdxfacebook.core.*;
 
 public class FacebookLogin {
 
-    VariablesDeclaration vd;
+    Account acc;
     SocketSlime socketSlime;
+    Encryption encr;
 
     private static final String TAG = Slime.class.getSimpleName();
     private GDXFacebook gdxFacebook;
 
-    public FacebookLogin(VariablesDeclaration vdRecebido, SocketSlime socketSlimeRecebido){
-        vd = vdRecebido;
-        socketSlime = socketSlimeRecebido;
+    public FacebookLogin(Account acc, SocketSlime socketSlime, Encryption encryption){
+        this.acc = acc;
+        this.socketSlime = socketSlime;
+        this.encr = encryption;
     }
 
     public void configFacebook(){
@@ -35,12 +42,12 @@ public class FacebookLogin {
     }
 
     private void loginWithReadPermissions() {
-        gdxFacebook.signIn(SignInMode.READ, vd.getPermissionsRead(), new GDXFacebookCallback<SignInResult>() {
+        gdxFacebook.signIn(SignInMode.READ, acc.getPermissionsRead(), new GDXFacebookCallback<SignInResult>() {
 
             @Override
             public void onSuccess(SignInResult result) {
                 gainMoreUserInfo();
-                vd.setLogin(true);
+                acc.setLogin(true);
             }
 
             @Override
@@ -80,12 +87,12 @@ public class FacebookLogin {
 
                 String fbName = root.getString("name");
                 String fbIdForThisApp = root.getString("id");
-                vd.setNome(fbName);
-                vd.setFbId(vd.encrypt(fbIdForThisApp));
-                vd.id = vd.encryptIn2(vd.decrypt(vd.getFbId()));
+                acc.setNome(fbName);
+                acc.setFbId(encr.encrypt(fbIdForThisApp));
+                acc.id = encr.encryptIn2(encr.decrypt(acc.getFbId()));
 
-                vd.getPrefs().putBoolean("firstLogin", true);
-                vd.getPrefs().flush();
+                acc.getPrefs().putBoolean("firstLogin", true);
+                acc.getPrefs().flush();
 
                 socketSlime.connectSocket();
                 socketSlime.configSocketEvents();
@@ -111,10 +118,10 @@ public class FacebookLogin {
     }
 
     private void autologin() {
-        if (!vd.isAutoLoginFinished() && vd.getPrefs().getBoolean("autosignin", false) && gdxFacebook.isLoaded()) {
-            if(vd.getPrefs().getBoolean("firstLogin")) {
+        if (!acc.isAutoLoginFinished() && acc.getPrefs().getBoolean("autosignin", false) && gdxFacebook.isLoaded()) {
+            if(acc.getPrefs().getBoolean("firstLogin")) {
                 loginWithReadPermissions();
-                vd.setAutoLoginFinished(true);
+                acc.setAutoLoginFinished(true);
             }
         }
     }

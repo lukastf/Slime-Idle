@@ -45,7 +45,8 @@ public class SocketSlime {
     private Socket socket;
     {
         try {
-            socket = IO.socket("http://157.230.83.239:8091");
+            //socket = IO.socket("http://157.230.83.239:8091");
+            socket = IO.socket("http://192.168.15.15:8091");
         } catch (Exception e) {
             System.out.println(e);
         }
@@ -62,141 +63,47 @@ public class SocketSlime {
         socket.on(Socket.EVENT_CONNECT, new Emitter.Listener() {
             @Override
             public void call(Object... args) {
-
-                JSONObject enviar = new JSONObject();
-                try {
-                    enviar.put("name", acc.getNome());
-                    if(acc.getFbId() != ""){
-                        enviar.put("fbId1", acc.id[0]);
-                        enviar.put("fbId2", acc.id[1]);
-                    }
-
-                    if(acc.getPassword() != "" && acc.getNickname() != "" && acc.getNickname() != ">Insert Nickname<"){
-                        enviar.put("nickname", acc.getNickname());
-                        enviar.put("password1", acc.pass[0]);
-                        enviar.put("password2", acc.pass[1]);
-                    }
-
-                    socket.emit("checkAccount", enviar);
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-
-                acc.setConectado(true);
-
+                acc.connect(socket);
             }
         }).on(Socket.EVENT_DISCONNECT, new Emitter.Listener() {
             @Override
             public void call(Object... args) {
-                acc.setFbId("");
-                acc.setLogin(false);
-                acc.setConectado(false);
-
-                slime.setLevel(0);
-                slime.setLastTimeTouch("time...");
-                coin.setCoins(0);
-
+                acc.disconnect(slime, coin);
             }
         }).on(Socket.EVENT_PING, new Emitter.Listener() {
             @Override
             public void call(Object... args) {
-                JSONObject enviar = new JSONObject();
-                try {
-                    enviar.put("name", acc.getNome());
-                    enviar.put("fbId1", acc.id[0]);
-                    enviar.put("fbId2", acc.id[1]);
-
-                    socket.emit("pingado", enviar);
-
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
+                acc.pingado(socket);
             }
         }).on("output", new Emitter.Listener() {
             @Override
             public void call(Object... args) {
-                JSONObject data = (JSONObject) args[0];
-                try {
-                    acc.setNome(data.getString("name"));
-                    acc.setFbId(data.getString("fbId"));
-                    acc.setNickname(data.getString("nickname"));
-                    acc.setPassword(data.getString("password"));
-
-                    slime.setLevel(data.getInt("level"));
-                    slime.setLastTimeTouch(data.getString("lastTimeTouch"));
-                    slime.setItemEquippedId(data.getInt("itemEquipped"));
-
-                    coin.setCoins(data.getInt("coins"));
-
-                    // holiday itens
-                    for(int i = 0; i < 4 ; i++){
-                        shop.itemsShopBought.set(i+2, data.getJSONObject("itens").getJSONArray("holiday").getJSONObject(i).getBoolean("bought"));
-                        shop.itemsShopNames.set(i+2,data.getJSONObject("itens").getJSONArray("holiday").getJSONObject(i).getString("name"));
-                        shop.itemsShopPrices.set(i+2,"price: "+data.getJSONObject("itens").getJSONArray("holiday").getJSONObject(i).getString("price")+ " coins");
-                    }
-
-                    //common itens
-                    for(int i = 0; i < 19; i++){
-                        shop.itemsShopBought.set(i+6, data.getJSONObject("itens").getJSONArray("common").getJSONObject(i).getBoolean("bought"));
-                        shop.itemsShopNames.set(i+6,data.getJSONObject("itens").getJSONArray("common").getJSONObject(i).getString("name"));
-                        shop.itemsShopPrices.set(i+6,"price: "+data.getJSONObject("itens").getJSONArray("common").getJSONObject(i).getString("price") + " coins");
-                    }
-
-                    //Gdx.app.log("output", "ok");
-                } catch (JSONException e) {
-                    Gdx.app.log("output", "Error");
-                }
+                slime.output(acc, coin, shop,args);
             }
         }).on("topLevelRes", new Emitter.Listener() {
             @Override
             public void call(Object... args) {
-                JSONArray data = (JSONArray) args[0];
-
-                try{
-
-                    for (int i = 0; i < 21; i++) {
-                        topLevel.topPlayers.set(i, "#" + (i+1)+ "  " + data.getJSONObject(i).getString("nickname"));
-                        topLevel.topPlayersLevel.set(i, "Lv: " + data.getJSONObject(i).getString("level"));
-                        topLevel.topPlayersItemEquippedId.set(i, data.getJSONObject(i).getInt("itemEquipped"));
-                    }
-
-                } catch (JSONException e){
-                    e.printStackTrace();
-                }
+                topLevel.topLevelRes(args);
             }
         }).on("buySuccessful", new Emitter.Listener() {
             @Override
             public void call(Object... args) {
-                JSONObject data = (JSONObject) args[0];
-                try {
-                    slime.setLastTimeTouch(data.getString("lastTimeTouch"));
-                    coin.setCoins(data.getInt("coins"));
-                    menu.setMenu_item_BuySuccess(true);
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
+                shop.buySuccessful(slime, coin, menu, args);
             }
         }).on("buyErrorReady", new Emitter.Listener() {
             @Override
             public void call(Object... args) {
-                menu.setMenu_item_BuyError_ready(true);
+                shop.buyErrorReady(menu);
             }
         }).on("buyErrorMoney", new Emitter.Listener() {
             @Override
             public void call(Object... args) {
-                menu.setMenu_item_BuyError_money(true);
+                shop.buyErrorMoney(menu);
             }
         }).on("equipSuccessful", new Emitter.Listener() {
             @Override
             public void call(Object... args) {
-                JSONObject data = (JSONObject) args[0];
-                try {
-                    slime.setItemEquippedId(data.getInt("itemEquipped"));
-                } catch (JSONException e){
-                    e.printStackTrace();
-                }
+                slime.equipSuccessful(args);
             }
         }).on("equipErrorBought", new Emitter.Listener() {
             @Override
@@ -205,215 +112,54 @@ public class SocketSlime {
         }).on("unequipSuccessful", new Emitter.Listener() {
             @Override
             public void call(Object... args) {
-                JSONObject data = (JSONObject) args[0];
-                try {
-                    slime.setItemEquippedId(data.getInt("itemEquipped"));
-                } catch (JSONException e){
-                    e.printStackTrace();
-                }
+                slime.unequipSuccessful(args);
             }
         }).on("setNicknameSuccessful", new Emitter.Listener() {
             @Override
             public void call(Object... args) {
-                JSONObject data = (JSONObject) args[0];
-                try {
-                    acc.setNickname(data.getString("nickname"));
-                } catch (JSONException e){
-                    e.printStackTrace();
-                }
-                acc.setSetNicknameSuccess(true);
-                acc.createAccountStrings.set(1,"> Nickname <");
+                acc.setNicknameSuccessful(args);
             }
         }).on("setNicknameError", new Emitter.Listener() {
             @Override
             public void call(Object... args) {
-                acc.setSetNicknameError(true);
+                acc.setNicknameError(args);
             }
         });
     }
 
     public void buyItem(){
-        JSONObject enviar = new JSONObject();
-        try {
-            enviar.put("fbId1", acc.id[0]);
-            enviar.put("fbId2", acc.id[1]);
-            enviar.put("itemId", item.getItemSelecionado());
-
-            socket.emit("buyItem", enviar);
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
+        shop.buyItem(acc, item, socket);
     }
 
     public void equipItem(){
-        JSONObject enviar = new JSONObject();
-        try {
-            enviar.put("fbId1", acc.id[0]);
-            enviar.put("fbId2", acc.id[1]);
-            enviar.put("itemId", item.getItemSelecionado());
-
-            socket.emit("equipItem", enviar);
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
+        slime.equipItem(acc, item, socket);
     }
 
     public void unequipItem() {
-        JSONObject enviar = new JSONObject();
-        try {
-            enviar.put("fbId1", acc.id[0]);
-            enviar.put("fbId2", acc.id[1]);
-            enviar.put("itemId", item.getItemSelecionado());
-
-            socket.emit("unequipItem", enviar);
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
+        slime.unequipItem(acc, item, socket);
     }
 
     public void screenPressed() {
-
-        JSONObject enviar = new JSONObject();
-        try {
-            enviar.put("fbId1", acc.id[0]);
-            enviar.put("fbId2", acc.id[1]);
-
-            socket.emit("screenPressed", enviar);
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
+        slime.screenPressed(acc, socket);
     }
 
     public void topLevel() {
-        socket.emit("topLevel");
+        topLevel.topLevel(socket);
     }
 
     public void createAccount() {
-
-        socket.connect();
-
-        JSONObject enviar = new JSONObject();
-        try {
-            enviar.put("name", acc.createAccountStrings.get(0));
-            enviar.put("nickname", acc.createAccountStrings.get(1));
-            enviar.put("password1", acc.pass[0]);
-            enviar.put("password2", acc.pass[1]);
-
-            socket.emit("createAccount", enviar);
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-
-        socket.on("createAccountSuccessful", new Emitter.Listener() {
-            @Override
-            public void call(Object... args) {
-                acc.setCreateAccountSuccess(true);
-                socket.disconnect();
-
-                acc.createAccountStrings.set(0, "> Name <");
-                acc.createAccountStrings.set(1, "> Nickname <");
-                acc.createAccountStrings.set(2, "> Password <");
-                acc.createAccountStrings.set(3, "> Password Again <");
-
-                acc.passwordsHidden.set(0, "> Insert Password <");
-                acc.passwordsHidden.set(1, "> Password <");
-                acc.passwordsHidden.set(2, "> Password Again <");
-
-                acc.setPassword("");
-                acc.pass = null;
-
-            }
-        });
-
-        socket.on("createAccountError", new Emitter.Listener() {
-            @Override
-            public void call(Object... args) {
-                acc.setCreateAccountError(true);
-                socket.disconnect();
-
-                acc.setNickname(">Insert Nickname<");
-                acc.passwordsHidden.set(0, "> Insert Password <");
-                acc.setPassword("");
-                acc.pass = null;
-            }
-        });
+        acc.createAccount(socket);
     }
 
     public void loginAccount() {
-        socket.connect();
-
-        JSONObject enviar = new JSONObject();
-        try {
-            enviar.put("nickname", acc.getNickname());
-            enviar.put("password1", acc.pass[0]);
-            enviar.put("password2", acc.pass[1]);
-
-            socket.emit("login", enviar);
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-
-        socket.on("loginSuccessful", new Emitter.Listener() {
-            @Override
-            public void call(Object... args) {
-                acc.setLoginSuccess(true);
-
-                JSONObject data = (JSONObject) args[0];
-                try {
-                    acc.setNome(data.getString("name"));
-                    acc.setFbId(data.getString("fbId"));
-                    acc.id = encryption.encryptIn2(encryption.decrypt(data.getString("fbId")));
-                    acc.setNickname(data.getString("nickname"));
-                    acc.setPassword(data.getString("password"));
-                    acc.pass = encryption.encryptIn2(encryption.decrypt(data.getString("password")));
-
-                    acc.getPrefs().putString("name", acc.getNome());
-                    acc.getPrefs().putString("fbId", acc.getFbId());
-                    acc.getPrefs().putString("nickname", acc.getNickname());
-                    acc.getPrefs().putString("password", acc.getPassword());
-                    acc.getPrefs().flush();
-
-                } catch (JSONException e){
-                    e.printStackTrace();
-                }
-
-                socket.disconnect();
-            }
-        });
-
-        socket.on("loginError", new Emitter.Listener() {
-            @Override
-            public void call(Object... args) {
-                acc.setLoginError(true);
-                socket.disconnect();
-            }
-        });
+        acc.loginAccount(encryption, socket);
     }
 
     public void setNickname() {
-        JSONObject enviar = new JSONObject();
-        try {
-            enviar.put("name", acc.getNome());
-            enviar.put("fbId1", acc.id[0]);
-            enviar.put("fbId2", acc.id[1]);
-            enviar.put("nickname", acc.createAccountStrings.get(1));
-
-            socket.emit("setNickname", enviar);
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
+        acc.setNickname(socket);
     }
 
     public void buyCoins(String transactionId){
-        JSONObject enviar = new JSONObject();
-        try {
-            enviar.put("fbId1", acc.id[0]);
-            enviar.put("fbId2", acc.id[1]);
-            enviar.put("buyId", transactionId);
-
-            socket.emit("buyCoins", enviar);
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
+        coin.buyCoins(acc, transactionId, socket);
     }
 }

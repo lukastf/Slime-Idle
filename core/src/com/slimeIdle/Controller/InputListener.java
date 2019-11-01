@@ -5,6 +5,8 @@ import com.slimeIdle.Model.Account;
 import com.slimeIdle.Model.Encryption;
 import com.slimeIdle.Model.Item;
 
+import java.awt.Paint;
+
 public class InputListener  implements Input.TextInputListener {
 
     Account acc;
@@ -22,6 +24,19 @@ public class InputListener  implements Input.TextInputListener {
 
     @Override
     public void input(String text) {
+
+        System.out.println("bear girls: " + text);
+
+        /*
+        Typeface typeface;
+        //initialize the custom font here
+
+        //enter the character to test
+        String charToTest="\u0978";
+        Paint paint=new Paint();
+        paint.setTypeface(typeface);
+        boolean hasGlyph=paint.hasGlyph(charToTest);
+         */
 
         //login
         // nickname

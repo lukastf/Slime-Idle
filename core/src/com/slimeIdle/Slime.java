@@ -35,6 +35,7 @@ import com.slimeIdle.View.RenderTopLevel;
 
 public class Slime extends ApplicationAdapter {
 
+	Font font = new Font();
 	Account account = new Account();
 	com.slimeIdle.Model.Slime slime = new com.slimeIdle.Model.Slime();
 	Coin coin = new Coin();
@@ -45,7 +46,6 @@ public class Slime extends ApplicationAdapter {
 	Encryption encryption = new Encryption();
 	Buttons btns = new Buttons();
 	PurchaseManager purchaseManager = new PurchaseManager();
-	Font font = new Font();
 	Window window = new Window();
 	Cart cart = new Cart();
 	RenderItems renderItems = new RenderItems(slime,topLevel,shop);
@@ -68,6 +68,7 @@ public class Slime extends ApplicationAdapter {
 	
 	@Override
 	public void create () {
+
 		//Gdx.input.setInputProcessor(this);
 		Gdx.input.setCatchBackKey(true);
 		purchaseManager.purchaseManager.install(new PurchaseObserver(socketSlime), purchaseManager.pmc, true);
@@ -89,6 +90,7 @@ public class Slime extends ApplicationAdapter {
 		loader.getTextures();
 		loader.getButtons();
 		loader.getSprites();
+        loader.loadFonts();
 		loader.getFonts();
 		loader.getControllers();
 

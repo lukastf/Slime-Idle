@@ -1,10 +1,16 @@
 package com.slimeIdle.Controller;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.assets.AssetManager;
+import com.badlogic.gdx.assets.loaders.FileHandleResolver;
+import com.badlogic.gdx.assets.loaders.resolvers.InternalFileHandleResolver;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
+import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGeneratorLoader;
+import com.badlogic.gdx.graphics.g2d.freetype.FreetypeFontLoader;
 import com.slimeIdle.Model.Account;
 import com.slimeIdle.Model.Buttons;
 import com.slimeIdle.Model.Cart;
@@ -18,6 +24,9 @@ import com.slimeIdle.Model.Window;
 import com.slimeIdle.View.Render;
 
 public class Loader {
+
+    AssetManager manager = new AssetManager();
+    FileHandleResolver resolver = new InternalFileHandleResolver();
 
     Buttons btn;
     Render render;
@@ -175,46 +184,227 @@ public class Loader {
         loadSprites();
     }
 
-    private void loadFonts() {
+    private void font(String GLYPHS, AssetManager manager, String fileName) {
 
-        font.generator = new FreeTypeFontGenerator(Gdx.files.internal("fonts/OpenSans-Regular.ttf"));
-        FreeTypeFontGenerator.FreeTypeFontParameter parameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
-        parameter.borderWidth = (int)(35 * Gdx.graphics.getDensity() * 0.03);
-        parameter.size = (int)(35 * Gdx.graphics.getDensity());
-        font.font = font.generator.generateFont(parameter);
+        FreetypeFontLoader.FreeTypeFontLoaderParameter parameter = new FreetypeFontLoader.FreeTypeFontLoaderParameter();
+        parameter.fontFileName = fileName+".ttf";
+        parameter.fontParameters.borderWidth = (int)(35 * Gdx.graphics.getDensity() * 0.03);
+        parameter.fontParameters.size = (int)(35 * Gdx.graphics.getDensity());
+        parameter.fontParameters.characters= GLYPHS;
+        manager.load(fileName+".ttf", BitmapFont.class, parameter);
+    }
 
-        // messages
-        parameter.borderWidth = (int)(25 * Gdx.graphics.getDensity() * 0.03);
-        parameter.size = (int)(25 * Gdx.graphics.getDensity());
-        parameter.color = Color.RED;
-        font.fontError = font.generator.generateFont(parameter);
-        parameter.color = Color.GREEN;
-        font.fontSuccess = font.generator.generateFont(parameter);
+    private void fontError (String GLYPHS, AssetManager manager, String fileName) {
 
-        // title
-        parameter.borderWidth = (int)(40 * Gdx.graphics.getDensity() * 0.03);
-        parameter.size = (int)(40 * Gdx.graphics.getDensity());
-        font.fontTitle = font.generator.generateFont(parameter);
+        FreetypeFontLoader.FreeTypeFontLoaderParameter parameter = new FreetypeFontLoader.FreeTypeFontLoaderParameter();
+        parameter.fontFileName = fileName+".ttf";
+        parameter.fontParameters.borderWidth = (int)(25 * Gdx.graphics.getDensity() * 0.03);
+        parameter.fontParameters.size = (int)(25 * Gdx.graphics.getDensity());
+        parameter.fontParameters.color = Color.RED;
+        parameter.fontParameters.characters= GLYPHS;
+        manager.load(fileName+"error.ttf", BitmapFont.class, parameter);
+    }
 
-        //menu
-        parameter.borderWidth = (int)(0 * Gdx.graphics.getDensity() * 0.03);
-        parameter.color = Color.BLACK;
-        parameter.size = (int)(20 * Gdx.graphics.getDensity());
-        font.fontTopLevel = font.generator.generateFont(parameter);
+    private void fontSuccess (String GLYPHS, AssetManager manager, String fileName) {
 
-        parameter.size = (int)(15 * Gdx.graphics.getDensity());
-        font.fontTopLevelNumber = font.generator.generateFont(parameter);
+        FreetypeFontLoader.FreeTypeFontLoaderParameter parameter = new FreetypeFontLoader.FreeTypeFontLoaderParameter();
+        parameter.fontFileName = fileName+".ttf";
+        parameter.fontParameters.borderWidth = (int)(25 * Gdx.graphics.getDensity() * 0.03);
+        parameter.fontParameters.size = (int)(25 * Gdx.graphics.getDensity());
+        parameter.fontParameters.color = Color.GREEN;
+        parameter.fontParameters.characters= GLYPHS;
+        manager.load(fileName+"success.ttf", BitmapFont.class, parameter);
+    }
 
-        // level dentro
-        parameter.borderWidth = (int)(35 * Gdx.graphics.getDensity() * 0.03);
-        parameter.color = Color.WHITE;
-        parameter.size = (int)(30 * Gdx.graphics.getDensity());
-        font.fontPlayerSelecionadoLevel = font.generator.generateFont(parameter);
+    private void fontTitle (String GLYPHS, AssetManager manager, String fileName) {
+
+        FreetypeFontLoader.FreeTypeFontLoaderParameter parameter = new FreetypeFontLoader.FreeTypeFontLoaderParameter();
+        parameter.fontFileName = fileName+".ttf";
+        parameter.fontParameters.borderWidth = (int)(40 * Gdx.graphics.getDensity() * 0.03);
+        parameter.fontParameters.size = (int)(40 * Gdx.graphics.getDensity());
+        parameter.fontParameters.color = Color.GREEN;
+        parameter.fontParameters.characters= GLYPHS;
+        manager.load(fileName+"title.ttf", BitmapFont.class, parameter);
+    }
+
+    private void fontTopLevel (String GLYPHS, AssetManager manager, String fileName) {
+
+        FreetypeFontLoader.FreeTypeFontLoaderParameter parameter = new FreetypeFontLoader.FreeTypeFontLoaderParameter();
+        parameter.fontFileName = fileName+".ttf";
+        parameter.fontParameters.borderWidth = (int)(0 * Gdx.graphics.getDensity() * 0.03);
+        parameter.fontParameters.color = Color.BLACK;
+        parameter.fontParameters.size = (int)(20 * Gdx.graphics.getDensity());
+        parameter.fontParameters.characters= GLYPHS;
+        manager.load(fileName+"topLevel.ttf", BitmapFont.class, parameter);
+    }
+
+    private void fontTopLevelNumber (String GLYPHS, AssetManager manager, String fileName) {
+
+        FreetypeFontLoader.FreeTypeFontLoaderParameter parameter = new FreetypeFontLoader.FreeTypeFontLoaderParameter();
+        parameter.fontFileName = fileName+".ttf";
+        parameter.fontParameters.borderWidth = (int)(0 * Gdx.graphics.getDensity() * 0.03);
+        parameter.fontParameters.color = Color.BLACK;
+        parameter.fontParameters.size = (int)(15 * Gdx.graphics.getDensity());
+        parameter.fontParameters.characters= GLYPHS;
+        manager.load(fileName+"topLevelNumber.ttf", BitmapFont.class, parameter);
+    }
+
+    private void fontPlayerSelecionadoLevel (String GLYPHS, AssetManager manager, String fileName) {
+
+        //FreeTypeFontGenerator.FreeTypeFontParameter parameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
+        FreetypeFontLoader.FreeTypeFontLoaderParameter parameter = new FreetypeFontLoader.FreeTypeFontLoaderParameter();
+        parameter.fontFileName = fileName+".ttf";
+        parameter.fontParameters.borderWidth = (int)(35 * Gdx.graphics.getDensity() * 0.03);
+        parameter.fontParameters.color = Color.WHITE;
+        parameter.fontParameters.size = (int)(30 * Gdx.graphics.getDensity());
+        parameter.fontParameters.characters= GLYPHS;
+        //return generator.generateFont(parameter);
+        manager.load(fileName+"playerSelecionadoLevel.ttf", BitmapFont.class, parameter);
+        //manager.finishLoading();
+        //return manager.get(fileName, BitmapFont.class);
+    }
+
+    public void loadFonts() {
+
+        manager.setLoader(FreeTypeFontGenerator.class, new FreeTypeFontGeneratorLoader(resolver));
+        manager.setLoader(BitmapFont.class, ".ttf", new FreetypeFontLoader(resolver));
+
+        String fontDEFAULT = "fonts/default/fontDEFAULT";
+        String fontJAPAN = "fonts/japan/fontJAPAN";
+        String fontKOREA = "fonts/korea/fontKOREA";
+        String fontCHINA = "fonts/china/fontCHINA";
+        String fontARABIA = "fonts/arabic/fontARABIA";
+
+        /*
+        String fontDEFAULT = "fonts/default/fontDEFAULT";
+        String fontJAPAN = "fonts/default/fontDEFAULT";
+        String fontKOREA = "fonts/default/fontDEFAULT";
+        String fontCHINA = "fonts/default/fontDEFAULT";
+        String fontARABIA = "fonts/default/fontDEFAULT";*/
+
+        /*
+        for (int i=0; i<=Integer.MAX_VALUE; i++) {
+            if (Character.isDefined(i)) {
+                //System.out.println(Integer.toHexString(i)+": "+ new String(Character.toChars(i)));
+                //Integer.toString(i);
+                font.glyps += new String(Character.toChars(i));
+            }
+        }
+         */
+
+        //System.out.println("braddock: "+font.glyps);
+
+        this.font(font.glyps, manager, fontDEFAULT);
+        this.fontError(font.glyps, manager, fontDEFAULT);
+        this.fontSuccess(font.glyps, manager, fontDEFAULT);
+        this.fontTitle(font.glyps, manager, fontDEFAULT);
+        this.fontTopLevel(font.glyps, manager, fontDEFAULT);
+        this.fontTopLevelNumber(font.glyps, manager, fontDEFAULT);
+        this.fontPlayerSelecionadoLevel(font.glyps, manager, fontDEFAULT);
+
+        /*
+        this.font(font.DEFAULT_GLYPHS, manager, fontDEFAULT);
+        this.fontError(font.DEFAULT_GLYPHS, manager, fontDEFAULT);
+        this.fontSuccess(font.DEFAULT_GLYPHS, manager, fontDEFAULT);
+        this.fontTitle(font.DEFAULT_GLYPHS, manager, fontDEFAULT);
+        this.fontTopLevel(font.DEFAULT_GLYPHS, manager, fontDEFAULT);
+        this.fontTopLevelNumber(font.DEFAULT_GLYPHS, manager, fontDEFAULT);
+        this.fontPlayerSelecionadoLevel(font.DEFAULT_GLYPHS, manager, fontDEFAULT);
+
+         */
+
+
+
+        this.font(font.glypsJapan, manager, fontJAPAN);
+        this.fontError(font.glypsJapan, manager, fontJAPAN);
+        this.fontSuccess(font.glypsJapan, manager, fontJAPAN);
+        this.fontTitle(font.glypsJapan, manager, fontJAPAN);
+        this.fontTopLevel(font.glypsJapan, manager, fontJAPAN);
+        this.fontTopLevelNumber(font.glypsJapan, manager, fontJAPAN);
+        this.fontPlayerSelecionadoLevel(font.glypsJapan, manager, fontJAPAN);
+
+
+
+        this.font(font.glypsKorea, manager, fontKOREA);
+        this.fontError(font.glypsKorea, manager, fontKOREA);
+        this.fontSuccess(font.glypsKorea, manager, fontKOREA);
+        this.fontTitle(font.glypsKorea, manager, fontKOREA);
+        this.fontTopLevel(font.glypsKorea, manager, fontKOREA);
+        this.fontTopLevelNumber(font.glypsKorea, manager, fontKOREA);
+        this.fontPlayerSelecionadoLevel(font.glypsKorea, manager, fontKOREA);
+
+        this.font(font.glypsChina, manager, fontCHINA);
+        this.fontError(font.glypsChina, manager, fontCHINA);
+        this.fontSuccess(font.glypsChina, manager, fontCHINA);
+        this.fontTitle(font.glypsChina, manager, fontCHINA);
+        this.fontTopLevel(font.glypsChina, manager, fontCHINA);
+        this.fontTopLevelNumber(font.glypsChina, manager, fontCHINA);
+        this.fontPlayerSelecionadoLevel(font.glypsChina, manager, fontCHINA);
+
+        /*
+        this.font(font.glypsArabia, manager, fontARABIA);
+        this.fontError(font.glypsArabia, manager, fontARABIA);
+        this.fontSuccess(font.glypsArabia, manager, fontARABIA);
+        this.fontTitle(font.glypsArabia, manager, fontARABIA);
+        this.fontTopLevel(font.glypsArabia, manager, fontARABIA);
+        this.fontTopLevelNumber(font.glypsArabia, manager, fontARABIA);
+        this.fontPlayerSelecionadoLevel(font.glypsArabia, manager, fontARABIA);*/
+
+
 
     }
 
     public void getFonts(){
-        loadFonts();
+
+        manager.finishLoading();
+
+        font.fontDEFAULT = manager.get("fonts/default/fontDEFAULT.ttf", BitmapFont.class);
+        font.fontErrorDEFAULT = manager.get("fonts/default/fontDEFAULTerror.ttf", BitmapFont.class);
+        font.fontSuccessDEFAULT = manager.get("fonts/default/fontDEFAULTsuccess.ttf", BitmapFont.class);
+        font.fontTitleDEFAULT = manager.get("fonts/default/fontDEFAULTtitle.ttf", BitmapFont.class);
+        font.fontTopLevelDEFAULT = manager.get("fonts/default/fontDEFAULTtopLevel.ttf", BitmapFont.class);
+        font.fontTopLevelNumberDEFAULT = manager.get("fonts/default/fontDEFAULTtopLevelNumber.ttf", BitmapFont.class);
+        font.fontPlayerSelecionadoLevelDEFAULT = manager.get("fonts/default/fontDEFAULTplayerSelecionadoLevel.ttf", BitmapFont.class);
+
+        font.fontJAPAN = manager.get("fonts/japan/fontJAPAN.ttf", BitmapFont.class);
+        font.fontErrorJAPAN = manager.get("fonts/japan/fontJAPANerror.ttf", BitmapFont.class);
+        font.fontSuccessJAPAN = manager.get("fonts/japan/fontJAPANsuccess.ttf", BitmapFont.class);
+        font.fontTitleJAPAN = manager.get("fonts/japan/fontJAPANtitle.ttf", BitmapFont.class);
+        font.fontTopLevelJAPAN = manager.get("fonts/japan/fontJAPANtopLevel.ttf", BitmapFont.class);
+        font.fontTopLevelNumberJAPAN = manager.get("fonts/japan/fontJAPANtopLevelNumber.ttf", BitmapFont.class);
+        font.fontPlayerSelecionadoLevelJAPAN = manager.get("fonts/japan/fontJAPANplayerSelecionadoLevel.ttf", BitmapFont.class);
+
+        font.fontKOREA = manager.get("fonts/korea/fontKOREA.ttf", BitmapFont.class);
+        font.fontErrorKOREA = manager.get("fonts/korea/fontKOREAerror.ttf", BitmapFont.class);
+        font.fontSuccessKOREA = manager.get("fonts/korea/fontKOREAsuccess.ttf", BitmapFont.class);
+        font.fontTitleKOREA = manager.get("fonts/korea/fontKOREAtitle.ttf", BitmapFont.class);
+        font.fontTopLevelKOREA = manager.get("fonts/korea/fontKOREAtopLevel.ttf", BitmapFont.class);
+        font.fontTopLevelNumberKOREA = manager.get("fonts/korea/fontKOREAtopLevelNumber.ttf", BitmapFont.class);
+        font.fontPlayerSelecionadoLevelKOREA = manager.get("fonts/korea/fontKOREAplayerSelecionadoLevel.ttf", BitmapFont.class);
+
+        font.fontCHINA = manager.get("fonts/china/fontCHINA.ttf", BitmapFont.class);
+        font.fontErrorCHINA = manager.get("fonts/china/fontCHINAerror.ttf", BitmapFont.class);
+        font.fontSuccessCHINA = manager.get("fonts/china/fontCHINAsuccess.ttf", BitmapFont.class);
+        font.fontTitleCHINA = manager.get("fonts/china/fontCHINAtitle.ttf", BitmapFont.class);
+        font.fontTopLevelCHINA = manager.get("fonts/china/fontCHINAtopLevel.ttf", BitmapFont.class);
+        font.fontTopLevelNumberCHINA = manager.get("fonts/china/fontCHINAtopLevelNumber.ttf", BitmapFont.class);
+        font.fontPlayerSelecionadoLevelCHINA = manager.get("fonts/china/fontCHINAplayerSelecionadoLevel.ttf", BitmapFont.class);
+
+        font.glyps = "";
+        font.glypsJapan = "";
+        font.glypsKorea = "";
+        font.glypsChina = "";
+
+        /*
+        font.fontARABIA = manager.get("fonts/arabic/fontARABIA.ttf", BitmapFont.class);
+        font.fontErrorARABIA = manager.get("fonts/arabic/fontARABIAerror.ttf", BitmapFont.class);
+        font.fontSuccessARABIA = manager.get("fonts/arabic/fontARABIAsuccess.ttf", BitmapFont.class);
+        font.fontTitleARABIA = manager.get("fonts/arabic/fontARABIAtitle.ttf", BitmapFont.class);
+        font.fontTopLevelARABIA = manager.get("fonts/arabic/fontARABIAtopLevel.ttf", BitmapFont.class);
+        font.fontTopLevelNumberARABIA = manager.get("fonts/arabic/fontARABIAtopLevelNumber.ttf", BitmapFont.class);
+        font.fontPlayerSelecionadoLevelARABIA = manager.get("fonts/arabic/fontARABIAplayerSelecionadoLevel.ttf", BitmapFont.class);*/
+
+        System.out.println("Tudo Carregado");
     }
 
 

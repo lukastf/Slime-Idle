@@ -3,7 +3,13 @@ package com.slimeIdle.Model;
 import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.utils.Array;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.ArrayList;
+
+import io.socket.client.Socket;
+import io.socket.emitter.Emitter;
 
 public class Account {
 
@@ -208,6 +214,193 @@ public class Account {
         passwordsHidden.add("> Insert Password <");
         passwordsHidden.add("> Password <");
         passwordsHidden.add("> Password Again <");
+    }
+
+    // socket io
+
+    public void connect(Socket socket) {
+
+        JSONObject enviar = new JSONObject();
+        try {
+            enviar.put("name", getNome());
+            if(getFbId() != ""){
+                enviar.put("fbId1", id[0]);
+                enviar.put("fbId2", id[1]);
+            }
+
+            if(getPassword() != "" && getNickname() != "" && getNickname() != ">Insert Nickname<"){
+                enviar.put("nickname", getNickname());
+                enviar.put("password1", pass[0]);
+                enviar.put("password2", pass[1]);
+            }
+
+            socket.emit("checkAccount", enviar);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        setConectado(true);
+    }
+
+    public void disconnect(Slime slime, Coin coin) {
+
+        setFbId("");
+        setLogin(false);
+        setConectado(false);
+
+        slime.setLevel(0);
+        slime.setLastTimeTouch("time...");
+        coin.setCoins(0);
+    }
+
+    public void pingado(Socket socket) {
+        JSONObject enviar = new JSONObject();
+        try {
+            enviar.put("name", getNome());
+            enviar.put("fbId1", id[0]);
+            enviar.put("fbId2", id[1]);
+
+            socket.emit("pingado", enviar);
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void createAccount(final Socket socket) {
+
+        socket.connect();
+
+        JSONObject enviar = new JSONObject();
+        try {
+            enviar.put("name", createAccountStrings.get(0));
+            enviar.put("nickname", createAccountStrings.get(1));
+            enviar.put("password1", pass[0]);
+            enviar.put("password2", pass[1]);
+
+            socket.emit("createAccount", enviar);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        socket.on("createAccountSuccessful", new Emitter.Listener() {
+            @Override
+            public void call(Object... args) {
+                setCreateAccountSuccess(true);
+                socket.disconnect();
+
+                createAccountStrings.set(0, "> Name <");
+                createAccountStrings.set(1, "> Nickname <");
+                createAccountStrings.set(2, "> Password <");
+                createAccountStrings.set(3, "> Password Again <");
+
+                passwordsHidden.set(0, "> Insert Password <");
+                passwordsHidden.set(1, "> Password <");
+                passwordsHidden.set(2, "> Password Again <");
+
+                setPassword("");
+                pass = null;
+
+            }
+        });
+
+        socket.on("createAccountError", new Emitter.Listener() {
+            @Override
+            public void call(Object... args) {
+                setCreateAccountError(true);
+                socket.disconnect();
+
+                setNickname(">Insert Nickname<");
+                passwordsHidden.set(0, "> Insert Password <");
+                setPassword("");
+                pass = null;
+            }
+        });
+    }
+
+    public void loginAccount (final Encryption encryption, final Socket socket) {
+
+        socket.connect();
+
+        JSONObject enviar = new JSONObject();
+        try {
+            enviar.put("nickname", this.getNickname());
+            enviar.put("password1", this.pass[0]);
+            enviar.put("password2", this.pass[1]);
+
+            socket.emit("login", enviar);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        socket.on("loginSuccessful", new Emitter.Listener() {
+            @Override
+            public void call(Object... args) {
+
+                setLoginSuccess(true);
+
+                JSONObject data = (JSONObject) args[0];
+                try {
+                    setNome(data.getString("name"));
+                    setFbId(data.getString("fbId"));
+                    id = encryption.encryptIn2(encryption.decrypt(data.getString("fbId")));
+                    setNickname(data.getString("nickname"));
+                    setPassword(data.getString("password"));
+                    pass = encryption.encryptIn2(encryption.decrypt(data.getString("password")));
+
+                    getPrefs().putString("name", getNome());
+                    getPrefs().putString("fbId", getFbId());
+                    getPrefs().putString("nickname", getNickname());
+                    getPrefs().putString("password", getPassword());
+                    getPrefs().flush();
+
+                } catch (JSONException e){
+                    e.printStackTrace();
+                }
+
+                socket.disconnect();
+            }
+        });
+
+        socket.on("loginError", new Emitter.Listener() {
+            @Override
+            public void call(Object... args) {
+                setLoginError(true);
+                socket.disconnect();
+            }
+        });
+    }
+
+    public void setNickname(Socket socket) {
+
+        JSONObject enviar = new JSONObject();
+        try {
+            enviar.put("name", getNome());
+            enviar.put("fbId1", id[0]);
+            enviar.put("fbId2", id[1]);
+            enviar.put("nickname", createAccountStrings.get(1));
+
+            socket.emit("setNickname", enviar);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void setNicknameSuccessful(Object... args) {
+        JSONObject data = (JSONObject) args[0];
+        try {
+            setNickname(data.getString("nickname"));
+        } catch (JSONException e){
+            e.printStackTrace();
+        }
+        setSetNicknameSuccess(true);
+        createAccountStrings.set(1,"> Nickname <");
+    }
+
+    public void setNicknameError(Object... args) {
+        setSetNicknameError(true);
     }
 
 }

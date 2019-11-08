@@ -19,28 +19,28 @@ public class RenderMenssages {
 
     public void messageSuccess(String msg1, String msg2){
         window.windowSpr.draw(Static.batch);
-        font.fontSuccessDEFAULT.draw(Static.batch, msg1,
+        font.fontDefault.get("success").draw(Static.batch, msg1,
                 (float) (Static.camera.position.x/2),
                 (float)(Static.camera.position.y + Static.camera.position.y/10));
-        font.fontSuccessDEFAULT.draw(Static.batch, msg2,
+        font.fontDefault.get("success").draw(Static.batch, msg2,
                 (float) (Static.camera.position.x/2),
                 (float)(Static.camera.position.y - Static.camera.position.y/45));
         btns.itemMenuBtns.get(4).draw(Static.batch);
-        font.fontTopLevelDEFAULT.draw(Static.batch, "Ok",
+        font.fontDefault.get("topLevel").draw(Static.batch, "Ok",
                 (float)(Static.camera.position.x/1.1),
                 (float)(Static.camera.position.y - Static.camera.position.y/2.10));
     }
 
     public void messageError(String msg1, String msg2){
         window.windowSpr.draw(Static.batch);
-        font.fontErrorDEFAULT.draw(Static.batch, msg1,
+        font.fontDefault.get("error").draw(Static.batch, msg1,
                 (float) (Static.camera.position.x/2),
                 (float)(Static.camera.position.y + Static.camera.position.y/10));
-        font.fontErrorDEFAULT.draw(Static.batch, msg2,
+        font.fontDefault.get("error").draw(Static.batch, msg2,
                 (float) (Static.camera.position.x/2),
                 (float)(Static.camera.position.y - Static.camera.position.y/45));
         btns.itemMenuBtns.get(4).draw(Static.batch);
-        font.fontTopLevelDEFAULT.draw(Static.batch, "Ok",
+        font.fontDefault.get("topLevel").draw(Static.batch, "Ok",
                 (float)(Static.camera.position.x/1.1),
                 (float)(Static.camera.position.y - Static.camera.position.y/2.10));
     }

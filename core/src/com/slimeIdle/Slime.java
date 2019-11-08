@@ -116,6 +116,8 @@ public class Slime extends ApplicationAdapter {
 	@Override
 	public void render () {
 
+	    //System.out.println("oi");
+
 		Gdx.gl.glClearColor(0.5f, 0.5f, 0.5f, 0);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 		Static.batch.begin();

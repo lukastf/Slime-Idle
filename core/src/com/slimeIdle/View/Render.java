@@ -136,46 +136,46 @@ public class Render {
 
 
     public void titleGame(String str){
-        font.fontTitleDEFAULT.draw(Static.batch, str,
+        font.fontDefault.get("title").draw(Static.batch, str,
                 (float) (Static.camera.position.x / 1.8),
                 (float) (Static.camera.position.y + Static.camera.position.y / 1.5));
     }
 
     public void titleScreen(String str){
-        font.fontDEFAULT.draw(Static.batch, str,
+        font.fontDefault.get("font").draw(Static.batch, str,
                 (float) (Static.camera.position.x / 3.5),
                 (float) (Static.camera.position.y + Static.camera.position.y / 1.1));
     }
 
     public void subTitleScreen(String str) {
-        font.fontPlayerSelecionadoLevelDEFAULT.draw(Static.batch, str,
+        font.fontDefault.get("playerSelecionadoLevel").draw(Static.batch, str,
                 (float) (Static.camera.position.x/3.5),
                 (float)(Static.camera.position.y + Static.camera.position.y/1.3));
     }
 
     public void nicknameLevelAndTimer() {
         // nickname
-        font.fontDEFAULT.draw(Static.batch, acc.getNickname(),
+        font.fontDefault.get("font").draw(Static.batch, acc.getNickname(),
                 (float) (Static.camera.position.x / 4.5),
                 (float) (Static.camera.position.y + Static.camera.position.y / 1.1));
         // level
-        font.fontDEFAULT.draw(Static.batch, "Lv: " + slime.getLevel(),
+        font.fontDefault.get("font").draw(Static.batch, "Lv: " + slime.getLevel(),
                 (float) (Static.camera.position.x / 4.5),
                 (float) (Static.camera.position.y + Static.camera.position.y / 1.3));
         // timer
-        font.fontDEFAULT.draw(Static.batch, slime.getLastTimeTouch(),
+        font.fontDefault.get("font").draw(Static.batch, slime.getLastTimeTouch(),
                 (float) (Static.camera.position.x / 4.5),
                 (float) (Static.camera.position.y + Static.camera.position.y / 1.6));
     }
 
     public void topPlayerName(String str) {
-        font.fontDEFAULT.draw(Static.batch, str,
+        font.fontDefault.get("font").draw(Static.batch, str,
                 (float) (Static.camera.position.x/10),
                 (float)(Static.camera.position.y + Static.camera.position.y/1.1));
     }
 
     public void pages(String str){
-        font.fontDEFAULT.draw(Static.batch, str,
+        font.fontDefault.get("font").draw(Static.batch, str,
                 (float) (Static.camera.position.x/1.2),
                 (float)(Static.camera.position.y - Static.camera.position.y/1.34));
         btn.prevBtn.draw(Static.batch);
@@ -186,27 +186,28 @@ public class Render {
 
         double space = spaceByLetter(str);
 
-        font.fontTopLevelDEFAULT.draw(Static.batch, str,
+        font.fontDefault.get("topLevel").draw(Static.batch, str,
                 (float) (Static.camera.position.x / space),
                 (float) (Static.camera.position.y + Static.camera.position.y / 1.9));
 
-        font.fontTopLevelJAPAN.draw(Static.batch, str,
-                (float) (Static.camera.position.x / space),
-                (float) (Static.camera.position.y + Static.camera.position.y / 1.9));
-
-
-        font.fontTopLevelKOREA.draw(Static.batch, str,
+        font.fontJapan.get("topLevel").draw(Static.batch, str,
                 (float) (Static.camera.position.x / space),
                 (float) (Static.camera.position.y + Static.camera.position.y / 1.9));
 
 
 
-        font.fontTopLevelCHINA.draw(Static.batch, str,
+        font.fontKorea.get("topLevel").draw(Static.batch, str,
                 (float) (Static.camera.position.x / space),
                 (float) (Static.camera.position.y + Static.camera.position.y / 1.9));
+
 
 
         /*
+        font.fontChina.get("topLevel").draw(Static.batch, str,
+                (float) (Static.camera.position.x / space),
+                (float) (Static.camera.position.y + Static.camera.position.y / 1.9));
+
+
         font.fontTopLevelARABIA.draw(Static.batch, str,
                 (float) (Static.camera.position.x / space),
                 (float) (Static.camera.position.y + Static.camera.position.y / 1.9));*/
@@ -218,28 +219,31 @@ public class Render {
 
         double space = spaceByLetter(str);
 
-        font.fontTopLevelDEFAULT.draw(Static.batch, str,
-                (float) (Static.camera.position.x / space),
-                (float) (Static.camera.position.y + Static.camera.position.y / 3.6));
-
-
-        font.fontTopLevelJAPAN.draw(Static.batch, str,
+        font.fontDefault.get("topLevel").draw(Static.batch, str,
                 (float) (Static.camera.position.x / space),
                 (float) (Static.camera.position.y + Static.camera.position.y / 3.6));
 
 
 
-        font.fontTopLevelKOREA.draw(Static.batch, str,
+        font.fontJapan.get("topLevel").draw(Static.batch, str,
                 (float) (Static.camera.position.x / space),
                 (float) (Static.camera.position.y + Static.camera.position.y / 3.6));
 
 
 
-        font.fontTopLevelCHINA.draw(Static.batch, str,
+
+        font.fontKorea.get("topLevel").draw(Static.batch, str,
                 (float) (Static.camera.position.x / space),
                 (float) (Static.camera.position.y + Static.camera.position.y / 3.6));
+
+
 
         /*
+        font.fontChina.get("topLevel").draw(Static.batch, str,
+                (float) (Static.camera.position.x / space),
+                (float) (Static.camera.position.y + Static.camera.position.y / 3.6));
+
+
 
         font.fontTopLevelARABIA.draw(Static.batch, str,
                 (float) (Static.camera.position.x / space),
@@ -250,7 +254,7 @@ public class Render {
 
         double space = spaceByLetter(str);
 
-        font.fontTopLevelDEFAULT.draw(Static.batch, str,
+        font.fontDefault.get("topLevel").draw(Static.batch, str,
                 (float) (Static.camera.position.x / space),
                 (float) (Static.camera.position.y + Static.camera.position.y / 40));
     }
@@ -259,7 +263,7 @@ public class Render {
 
         double space = spaceByLetter(str);
 
-        font.fontTopLevelDEFAULT.draw(Static.batch, str,
+        font.fontDefault.get("topLevel").draw(Static.batch, str,
                 (float) (Static.camera.position.x / space),
                 (float) (Static.camera.position.y - Static.camera.position.y / 4.6));
     }
@@ -268,7 +272,7 @@ public class Render {
 
         double space = spaceByLetter(str);
 
-        font.fontTopLevelDEFAULT.draw(Static.batch, str,
+        font.fontDefault.get("topLevel").draw(Static.batch, str,
                 (float) (Static.camera.position.x / space),
                 (float) (Static.camera.position.y - Static.camera.position.y / 2.10));
     }
@@ -277,11 +281,11 @@ public class Render {
 
         double spaceIcon = spaceByIcon(leftIcon);
 
-        font.fontTopLevelDEFAULT.draw(Static.batch,
+        font.fontDefault.get("topLevel").draw(Static.batch,
                 str1,
                 (float)(Static.camera.position.x/spaceIcon),
                 (float)(Static.camera.position.y + Static.camera.position.y/1.8));
-        font.fontTopLevelNumberDEFAULT.draw(Static.batch,
+        font.fontDefault.get("topLevelNumber").draw(Static.batch,
                 str2,
                 (float)(Static.camera.position.x/spaceIcon),
                 (float)(Static.camera.position.y + Static.camera.position.y/2.05));
@@ -291,11 +295,11 @@ public class Render {
 
         double spaceIcon = spaceByIcon(leftIcon);
 
-        font.fontTopLevelDEFAULT.draw(Static.batch,
+        font.fontDefault.get("topLevel").draw(Static.batch,
                 str1,
                 (float)(Static.camera.position.x/spaceIcon),
                 (float)(Static.camera.position.y + Static.camera.position.y/3.3));
-        font.fontTopLevelNumberDEFAULT.draw(Static.batch,
+        font.fontDefault.get("topLevelNumber").draw(Static.batch,
                 str2,
                 (float)(Static.camera.position.x/spaceIcon),
                 (float)(Static.camera.position.y + Static.camera.position.y/4.3));
@@ -305,11 +309,11 @@ public class Render {
 
         double spaceIcon = spaceByIcon(leftIcon);
 
-        font.fontTopLevelDEFAULT.draw(Static.batch,
+        font.fontDefault.get("topLevel").draw(Static.batch,
                 str1,
                 (float) (Static.camera.position.x/spaceIcon),
                 (float)(Static.camera.position.y + Static.camera.position.y/20));
-        font.fontTopLevelNumberDEFAULT.draw(Static.batch,
+        font.fontDefault.get("topLevelNumber").draw(Static.batch,
                 str2,
                 (float) (Static.camera.position.x/spaceIcon),
                 (float)(Static.camera.position.y - Static.camera.position.y/45));
@@ -319,11 +323,11 @@ public class Render {
 
         double spaceIcon = spaceByIcon(leftIcon);
 
-        font.fontTopLevelDEFAULT.draw(Static.batch,
+        font.fontDefault.get("topLevel").draw(Static.batch,
                 str1,
                 (float) (Static.camera.position.x/spaceIcon),
                 (float)(Static.camera.position.y - Static.camera.position.y/5.2));
-        font.fontTopLevelNumberDEFAULT.draw(Static.batch,
+        font.fontDefault.get("topLevelNumber").draw(Static.batch,
                 str2,
                 (float) (Static.camera.position.x/spaceIcon),
                 (float)(Static.camera.position.y - Static.camera.position.y/3.7));
@@ -333,11 +337,11 @@ public class Render {
 
         double spaceIcon = spaceByIcon(leftIcon);
 
-        font.fontTopLevelDEFAULT.draw(Static.batch,
+        font.fontDefault.get("topLevel").draw(Static.batch,
                 str1,
                 (float)(Static.camera.position.x/spaceIcon),
                 (float)(Static.camera.position.y - Static.camera.position.y/2.25));
-        font.fontTopLevelNumberDEFAULT.draw(Static.batch,
+        font.fontDefault.get("topLevelNumber").draw(Static.batch,
                 str2,
                 (float) (Static.camera.position.x/spaceIcon),
                 (float)(Static.camera.position.y - Static.camera.position.y/1.94));
@@ -346,7 +350,7 @@ public class Render {
     public void addFreeCoin(){
         float x = Gdx.graphics.getDeltaTime()*5.2f;
         coin.freeCoinPosition = coin.freeCoinPosition - x;
-        font.fontDEFAULT.draw(Static.batch, "+1 Coin!",
+        font.fontDefault.get("font").draw(Static.batch, "+1 Coin!",
                 (float) (Static.camera.position.x),
                 (float)(Static.camera.position.y + Static.camera.position.y/coin.freeCoinPosition));
         if(coin.freeCoinPosition <= 0.01){

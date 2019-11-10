@@ -37,7 +37,7 @@ mongo.connect('mongodb://root:%40%40Lu17101995@localhost/admin',
 
     client.on('connection', function(socket) {
 
-        console.log("connection socket");
+        console.log("connection socket こんにちは");
         let players = SlimeDB.collection('players');
         let transactions = SlimeDB.collection('transactions');
 

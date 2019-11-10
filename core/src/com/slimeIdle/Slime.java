@@ -25,12 +25,13 @@ import com.slimeIdle.Model.SocketSlime;
 import com.slimeIdle.Model.Static;
 import com.slimeIdle.Model.TopLevel;
 import com.slimeIdle.Model.Window;
+import com.slimeIdle.View.AllTextStrings;
 import com.slimeIdle.View.Render;
 import com.slimeIdle.View.RenderCart;
 import com.slimeIdle.View.RenderCoin;
 import com.slimeIdle.View.RenderItems;
 import com.slimeIdle.View.RenderLoginScreen;
-import com.slimeIdle.View.RenderMenssages;
+import com.slimeIdle.View.RenderMessages;
 import com.slimeIdle.View.RenderTopLevel;
 
 public class Slime extends ApplicationAdapter {
@@ -59,11 +60,11 @@ public class Slime extends ApplicationAdapter {
 	// renders
 	Render render = new Render(btns, account, font, slime, coin);
 	Loader loader = new Loader(btns, render, account,window,slime,cart,coin,topLevel,menu,shop,font);
-	RenderMenssages renderMenssages = new RenderMenssages(window, font, btns);
-	RenderCart renderCart = new RenderCart(menu, shop, render, renderMenssages, item, slime, btns, coin);
-	RenderCoin renderCoin = new RenderCoin(btns, render, renderMenssages, coin);
+	RenderMessages renderMessages = new RenderMessages(window, font, btns);
+	RenderCart renderCart = new RenderCart(menu, shop, render, renderMessages, item, slime, btns, coin);
+	RenderCoin renderCoin = new RenderCoin(btns, render, renderMessages, coin);
 	RenderTopLevel renderTopLevel = new RenderTopLevel(menu,render, topLevel, btns, slime, shop,renderItems);
-	RenderLoginScreen renderLoginScreen = new RenderLoginScreen(account,render,renderMenssages, btns);
+	RenderLoginScreen renderLoginScreen = new RenderLoginScreen(account,render, renderMessages, btns);
 
 	
 	@Override
@@ -135,22 +136,22 @@ public class Slime extends ApplicationAdapter {
 
                 if(!account.isSetNicknameSuccess() && !account.isSetNicknameError()) {
 
-                	render.titleScreen("Your Nickname");
+                	render.titleScreen(AllTextStrings.yourNickname);
 
 					btns.itemMenuBtns.get(1).draw(Static.batch);
-					render.itemMenuBtnsSimpleText1(account.createAccountStrings.get(1));
+					render.itemMenuBtnsSimpleText(account.createAccountStrings.get(1), 1);
 
 					btns.itemMenuBtns.get(2).draw(Static.batch);
-					render.itemMenuBtnsSimpleText2("Ok");
+					render.itemMenuBtnsSimpleText(AllTextStrings.ok, 2);
 
 				}
 
 				if(account.isSetNicknameError()){
-                	renderMenssages.messageError("Error at", "choose nickname");
+                	renderMessages.messageError(AllTextStrings.errorNickname[0], AllTextStrings.errorNickname[1]);
 				}
 
 				if(account.isSetNicknameSuccess()){
-                	renderMenssages.messageSuccess("Successfully", "nickname chosen");
+                	renderMessages.messageSuccess(AllTextStrings.successNickname[0], AllTextStrings.successNickname[1]);
 				}
 
             } else {
@@ -207,14 +208,14 @@ public class Slime extends ApplicationAdapter {
 			} else {
 
 				//title game
-				render.titleGame("Slime Idle");
+				render.titleGame(AllTextStrings.titleGame);
 
 				//slime
 				slime.slimeSpr.draw(Static.batch);
 
 				// buttons
 				btns.itemMenuBtns.get(4).draw(Static.batch);
-				render.itemMenuBtnsSimpleText4("Login");
+				render.itemMenuBtnsSimpleText(AllTextStrings.login, 4);
 
 				btns.loginButtonBtn.draw(Static.batch);
 			}

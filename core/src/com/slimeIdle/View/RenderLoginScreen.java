@@ -8,13 +8,13 @@ public class RenderLoginScreen {
 
     Account acc;
     Render render;
-    RenderMenssages renderMenssages;
+    RenderMessages renderMessages;
     Buttons btns;
 
-    public RenderLoginScreen(Account acc, Render render, RenderMenssages renderMenssages, Buttons btns){
+    public RenderLoginScreen(Account acc, Render render, RenderMessages renderMessages, Buttons btns){
         this.acc = acc;
         this.render = render;
-        this.renderMenssages = renderMenssages;
+        this.renderMessages = renderMessages;
         this.btns = btns;
     }
 
@@ -29,33 +29,38 @@ public class RenderLoginScreen {
             if(!acc.isCreateAccountSuccess() && !acc.isCreateAccountError() && !acc.isCreateAccountErrorPass()) {
 
                 btns.backBtn.draw(Static.batch);
-                render.titleScreen("Create Account");
+                render.titleScreen(AllTextStrings.createAccount);
+
+                /*for (int i = 0; i < 5; i++) {
+                    btns.itemMenuBtns.get(i).draw(Static.batch);
+                    render.itemMenuBtnsSimpleText0(acc.createAccountStrings.get(0));
+                }*/
 
                 btns.itemMenuBtns.get(0).draw(Static.batch);
-                render.itemMenuBtnsSimpleText0(acc.createAccountStrings.get(0));
+                render.itemMenuBtnsSimpleText(acc.createAccountStrings.get(0),0);
 
                 btns.itemMenuBtns.get(1).draw(Static.batch);
-                render.itemMenuBtnsSimpleText1(acc.createAccountStrings.get(1));
+                render.itemMenuBtnsSimpleText(acc.createAccountStrings.get(1),1);
 
                 btns.itemMenuBtns.get(2).draw(Static.batch);
-                render.itemMenuBtnsSimpleText2(acc.passwordsHidden.get(1));
+                render.itemMenuBtnsSimpleText(acc.passwordsHidden.get(1), 2);
 
                 btns.itemMenuBtns.get(3).draw(Static.batch);
-                render.itemMenuBtnsSimpleText3(acc.passwordsHidden.get(2));
+                render.itemMenuBtnsSimpleText(acc.passwordsHidden.get(2), 3);
 
                 btns.itemMenuBtns.get(4).draw(Static.batch);
-                render.itemMenuBtnsSimpleText4("Create Account");
+                render.itemMenuBtnsSimpleText(AllTextStrings.createAccount, 4);
 
             }
 
             if(acc.isCreateAccountErrorPass()){
-                renderMenssages.messageError("Password","doesn't match");
+                renderMessages.messageError(AllTextStrings.errorPassword[0], AllTextStrings.errorPassword[1]);
             }
             if(acc.isCreateAccountError()){
-                renderMenssages.messageError("Error check", "input fields");
+                renderMessages.messageError(AllTextStrings.errorInput[0], AllTextStrings.errorInput[1]);
             }
             if(acc.isCreateAccountSuccess()){
-                renderMenssages.messageSuccess("Successfully", "created");
+                renderMessages.messageSuccess(AllTextStrings.successCreated[0], AllTextStrings.successCreated[1]);
             }
 
 
@@ -63,28 +68,28 @@ public class RenderLoginScreen {
 
             if(!acc.isLoginSuccess() && !acc.isLoginError()) {
 
-                render.titleScreen("Login");
+                render.titleScreen(AllTextStrings.login);
 
                 btns.itemMenuBtns.get(1).draw(Static.batch);
-                render.itemMenuBtnsSimpleText1(acc.getNickname());
+                render.itemMenuBtnsSimpleText(acc.getNickname(),1);
 
                 btns.itemMenuBtns.get(2).draw(Static.batch);
-                render.itemMenuBtnsSimpleText2(acc.passwordsHidden.get(0));
+                render.itemMenuBtnsSimpleText(acc.passwordsHidden.get(0), 2);
 
                 btns.itemMenuBtns.get(3).draw(Static.batch);
-                render.itemMenuBtnsSimpleText3("Login");
+                render.itemMenuBtnsSimpleText(AllTextStrings.login, 3);
 
                 btns.itemMenuBtns.get(4).draw(Static.batch);
-                render.itemMenuBtnsSimpleText4("Create Account");
+                render.itemMenuBtnsSimpleText(AllTextStrings.createAccount, 4);
 
             }
 
             if(acc.isLoginError()){
-                renderMenssages.messageError("Error at", "login");
+                renderMessages.messageError(AllTextStrings.errorLogin[0], AllTextStrings.errorLogin[1]);
             }
 
             if(acc.isLoginSuccess()){
-                renderMenssages.messageSuccess("Successfully", "login");
+                renderMessages.messageSuccess(AllTextStrings.successLogin[0], AllTextStrings.successLogin[1]);
             }
 
         }

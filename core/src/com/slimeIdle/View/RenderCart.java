@@ -13,7 +13,7 @@ public class RenderCart {
     Menu menu;
     Shop shop;
     Render render;
-    RenderMenssages renderMenssages;
+    RenderMessages renderMessages;
     Item item;
     Slime slime;
     Buttons btns;
@@ -23,7 +23,7 @@ public class RenderCart {
             Menu menu,
             Shop shop,
             Render renderRecebido,
-            RenderMenssages renderMenssagesRecebido,
+            RenderMessages renderMessagesRecebido,
             Item item,
             Slime slime,
             Buttons btns,
@@ -33,7 +33,7 @@ public class RenderCart {
         this.menu = menu;
         this.shop = shop;
         this.render = renderRecebido;
-        this.renderMenssages = renderMenssagesRecebido;
+        this.renderMessages = renderMessagesRecebido;
         this.item = item;
         this.slime = slime;
         this.btns = btns;
@@ -77,20 +77,20 @@ public class RenderCart {
                 }
             }
             if(menu.isMenu_item_BuySuccess()){
-                renderMenssages.messageSuccess("Successfully", "Bought");
+                renderMessages.messageSuccess(AllTextStrings.successBuy[0], AllTextStrings.successBuy[1]);
             }
             if(menu.isMenu_item_BuyError_ready()){
-                renderMenssages.messageError("Your slime is", "already Read!");
+                renderMessages.messageError(AllTextStrings.errorSlimeReady[0], AllTextStrings.errorSlimeReady[1]);
             }
             if(menu.isMenu_item_BuyError_money()) {
-                renderMenssages.messageError("You don't", "have coins");
+                renderMessages.messageError(AllTextStrings.errorBuy[0], AllTextStrings.errorBuy[1]);
             }
 
 
         } else {
 
-            render.titleScreen("Shop");
-            render.subTitleScreen("Coins: " + coin.getCoins());
+            render.titleScreen(AllTextStrings.shop);
+            render.subTitleScreen(AllTextStrings.coins[0] + coin.getCoins());
 
             btns.itemMenuBtns.get(0).draw(Static.batch);
             btns.itemMenuBtns.get(1).draw(Static.batch);
@@ -101,23 +101,29 @@ public class RenderCart {
             if (menu.getMenuCurrentPage() == 1) {
 
                 //time reset
-                //vd.timeSpr.draw(vd.batch);
                 shop.itemsShopSprites.get(0).draw(Static.batch);
-                shop.itemsShopNames.set(0,"Time Reset");
+                shop.itemsShopNames.set(0,AllTextStrings.noItemShopNames[0]);
                 shop.itemsShopPrices.set(0,"price: 10 coins");
-                render.itemMenuBtnsDoubleText0(shop.itemsShopNames.get(0), shop.itemsShopPrices.get(0),true);
+                //render.itemMenuBtnsDoubleText0(shop.itemsShopNames.get(0), shop.itemsShopPrices.get(0),true);
+                render.itemMenuBtnsDoubleText(shop.itemsShopNames.get(0), shop.itemsShopPrices.get(0), true, 0);
 
                 //change nickname
-                //vd.pencilSpr.draw(vd.batch);
                 shop.itemsShopSprites.get(1).draw(Static.batch);
-                shop.itemsShopNames.set(1,"Change Nick");
+                shop.itemsShopNames.set(1,AllTextStrings.noItemShopNames[1]);
                 shop.itemsShopPrices.set(1,"price: 10 coins");
-                render.itemMenuBtnsDoubleText1(shop.itemsShopNames.get(1), shop.itemsShopPrices.get(1),true);
+                //render.itemMenuBtnsDoubleText1(shop.itemsShopNames.get(1), shop.itemsShopPrices.get(1),true);
+                render.itemMenuBtnsDoubleText(shop.itemsShopNames.get(1), shop.itemsShopPrices.get(1), true, 1);
 
                 for(int i = 2; i < 5; i++){
                     shop.itemsShopSprites.get(i).draw(Static.batch);
                     //vd.itemsShopNames.set(i,"Item " + i);
                    // vd.itemsShopPrices.set(i,"price: 0 coins");
+
+                    //for (int index = 0; index < 5; index ++) {
+                        render.itemMenuBtnsDoubleText(shop.itemsShopNames.get(i), shop.itemsShopPrices.get(i), true, i);
+                    //}
+
+                    /*
                     if(i == 2){
                         render.itemMenuBtnsDoubleText2(shop.itemsShopNames.get(i), shop.itemsShopPrices.get(i), true);
                     }
@@ -126,7 +132,7 @@ public class RenderCart {
                     }
                     if(i == 4){
                         render.itemMenuBtnsDoubleText4(shop.itemsShopNames.get(i), shop.itemsShopPrices.get(i), true);
-                    }
+                    }*/
                 }
             }
             if (menu.getMenuCurrentPage() == 2) {
@@ -135,6 +141,10 @@ public class RenderCart {
                     shop.itemsShopSprites.get(i).draw(Static.batch);
                     //vd.itemsShopNames.set(i,"Item " + i);
                     //vd.itemsShopPrices.set(i,"price: 0 coins");
+
+                    render.itemMenuBtnsDoubleText(shop.itemsShopNames.get(i), shop.itemsShopPrices.get(i), true, i-5);
+
+                    /*
                     if(i == 5){
                         render.itemMenuBtnsDoubleText0(shop.itemsShopNames.get(i), shop.itemsShopPrices.get(i), true);
                     }
@@ -149,7 +159,7 @@ public class RenderCart {
                     }
                     if(i == 9){
                         render.itemMenuBtnsDoubleText4(shop.itemsShopNames.get(i), shop.itemsShopPrices.get(i), true);
-                    }
+                    }*/
                 }
             }
             if (menu.getMenuCurrentPage() == 3) {
@@ -157,6 +167,10 @@ public class RenderCart {
                     shop.itemsShopSprites.get(i).draw(Static.batch);
                     //vd.itemsShopNames.set(i,"Item " + i);
                     //vd.itemsShopPrices.set(i,"price: 0 coins");
+
+                    render.itemMenuBtnsDoubleText(shop.itemsShopNames.get(i), shop.itemsShopPrices.get(i), true, i-10);
+
+                    /*
                     if(i == 10){
                         render.itemMenuBtnsDoubleText0(shop.itemsShopNames.get(i), shop.itemsShopPrices.get(i), true);
                     }
@@ -171,7 +185,7 @@ public class RenderCart {
                     }
                     if(i == 14){
                         render.itemMenuBtnsDoubleText4(shop.itemsShopNames.get(i), shop.itemsShopPrices.get(i), true);
-                    }
+                    }*/
                 }
             }
             if (menu.getMenuCurrentPage() == 4) {
@@ -179,6 +193,10 @@ public class RenderCart {
                     shop.itemsShopSprites.get(i).draw(Static.batch);
                     //vd.itemsShopNames.set(i,"Item " + i);
                     //vd.itemsShopPrices.set(i,"price: 0 coins");
+
+                    render.itemMenuBtnsDoubleText(shop.itemsShopNames.get(i), shop.itemsShopPrices.get(i), true, i-15);
+
+                    /*
                     if(i == 15){
                         render.itemMenuBtnsDoubleText0(shop.itemsShopNames.get(i), shop.itemsShopPrices.get(i), true);
                     }
@@ -193,7 +211,7 @@ public class RenderCart {
                     }
                     if(i == 19){
                         render.itemMenuBtnsDoubleText4(shop.itemsShopNames.get(i), shop.itemsShopPrices.get(i), true);
-                    }
+                    }*/
                 }
             }
 
@@ -203,6 +221,10 @@ public class RenderCart {
                     shop.itemsShopSprites.get(i).draw(Static.batch);
                     //vd.itemsShopNames.set(i,"Item " + i);
                     //vd.itemsShopPrices.set(i,"price: 0 coins");
+
+                    render.itemMenuBtnsDoubleText(shop.itemsShopNames.get(i), shop.itemsShopPrices.get(i), true, i-20);
+
+                    /*
                     if(i == 20){
                         render.itemMenuBtnsDoubleText0(shop.itemsShopNames.get(i), shop.itemsShopPrices.get(i), true);
                     }
@@ -217,7 +239,7 @@ public class RenderCart {
                     }
                     if(i == 24){
                         render.itemMenuBtnsDoubleText4(shop.itemsShopNames.get(i), shop.itemsShopPrices.get(i), true);
-                    }
+                    }*/
                 }
             }
 

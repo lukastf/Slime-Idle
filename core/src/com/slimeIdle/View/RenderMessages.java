@@ -7,76 +7,44 @@ import com.slimeIdle.Model.Font;
 import com.slimeIdle.Model.Static;
 import com.slimeIdle.Model.Window;
 
+import java.util.Map;
+
 public class RenderMessages {
 
     Window window;
     Font font;
     Buttons btns;
+    Render render;
 
-    public RenderMessages(Window window, Font font, Buttons btns){
+    public RenderMessages(Window window, Font font, Buttons btns, Render render){
         this.window = window;
         this.font = font;
         this.btns = btns;
+        this.render = render;
     }
+
 
     public void messageSuccess(String msg1, String msg2){
 
-        window.windowSpr.draw(Static.batch);
+        window.drawWindow();
 
-        BitmapFontCache fontSuccess = font.fontDefaultCache.get("message").getFont().newFontCache();
+        render.drawTextAllLanguages("font", msg1, Static.cam.viewportWidth * 0.25f,Static.cam.viewportHeight * 0.35f, Color.GREEN);
+        render.drawTextAllLanguages("font", msg2, Static.cam.viewportWidth * 0.25f,Static.cam.viewportHeight * 0.30f, Color.GREEN);
 
-        fontSuccess.setColor(Color.GREEN);
+        btns.drawMenuBtn(4);
 
-        fontSuccess.addText(msg1,(float) (Static.camera.position.x/2), (float)(Static.camera.position.y + Static.camera.position.y/10));
-
-        fontSuccess.addText(msg2, (float) (Static.camera.position.x/2), (float)(Static.camera.position.y - Static.camera.position.y/45));
-
-        fontSuccess.draw(Static.batch);
-
-        /*
-        fontSuccess.getFont().draw(Static.batch, msg1,
-                (float) (Static.camera.position.x/2),
-                (float)(Static.camera.position.y + Static.camera.position.y/10));
-        fontSuccess.getFont().draw(Static.batch, msg2,
-                (float) (Static.camera.position.x/2),
-                (float)(Static.camera.position.y - Static.camera.position.y/45));*/
-        btns.itemMenuBtns.get(4).draw(Static.batch);
-
-        font.fontDefaultCache.get("topLevel").clear();
-
-        font.fontDefaultCache.get("topLevel").addText(AllTextStrings.ok, (float)(Static.camera.position.x/1.1), (float)(Static.camera.position.y - Static.camera.position.y/2.10));
-
-        font.fontDefaultCache.get("topLevel").draw(Static.batch);
-
-        /*font.fontDefaultCache.get("topLevel").getFont().draw(Static.batch, "Ok",
-                (float)(Static.camera.position.x/1.1),
-                (float)(Static.camera.position.y - Static.camera.position.y/2.10));*/
+        render.itemMenuBtnsSimpleText(AllTextStringsLanguages.ok, false,4);
     }
 
     public void messageError(String msg1, String msg2){
 
-        window.windowSpr.draw(Static.batch);
+        window.drawWindow();
 
-        BitmapFontCache fontError = font.fontDefaultCache.get("message").getFont().newFontCache();
+        render.drawTextAllLanguages("font", msg1, Static.cam.viewportWidth * 0.25f,Static.cam.viewportHeight * 0.35f, Color.RED);
+        render.drawTextAllLanguages("font", msg2, Static.cam.viewportWidth * 0.25f,Static.cam.viewportHeight * 0.30f, Color.RED);
 
-        fontError.setColor(Color.RED);
+        btns.drawMenuBtn(4);
 
-        fontError.addText(msg1, (float) (Static.camera.position.x/2), (float)(Static.camera.position.y + Static.camera.position.y/10));
-
-        fontError.addText(msg2, (float) (Static.camera.position.x/2), (float)(Static.camera.position.y - Static.camera.position.y/45));
-
-        fontError.draw(Static.batch);
-        //fontError.getFont().draw(Static.batch, msg2);
-        btns.itemMenuBtns.get(4).draw(Static.batch);
-
-        font.fontDefaultCache.get("topLevel").clear();
-
-        font.fontDefaultCache.get("topLevel").addText(AllTextStrings.ok, (float)(Static.camera.position.x/1.1), (float)(Static.camera.position.y - Static.camera.position.y/2.10));
-
-        font.fontDefaultCache.get("topLevel").draw(Static.batch);
-
-        /*font.fontDefaultCache.get("topLevel").getFont().draw(Static.batch, "Ok",
-                (float)(Static.camera.position.x/1.1),
-                (float)(Static.camera.position.y - Static.camera.position.y/2.10));*/
+        render.itemMenuBtnsSimpleText(AllTextStringsLanguages.ok, false,4);
     }
 }

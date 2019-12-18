@@ -4,7 +4,6 @@ import com.slimeIdle.Model.Buttons;
 import com.slimeIdle.Model.Menu;
 import com.slimeIdle.Model.Shop;
 import com.slimeIdle.Model.Slime;
-import com.slimeIdle.Model.Static;
 import com.slimeIdle.Model.TopLevel;
 
 public class RenderTopLevel {
@@ -39,82 +38,74 @@ public class RenderTopLevel {
     public void render(){
         if(menu.isMenu_topLevel_PlayerSelecionado()) {
 
+            slime.drawBackground(slime.getBackgroundEquipped(topLevel.topPlayersBackgroundEquippedId.get(topLevel.getPlayerTopSelecionado())));
+
             render.topPlayerName(topLevel.topPlayers.get(topLevel.getPlayerTopSelecionado()));
             render.subTitleScreen(topLevel.topPlayersLevel.get(topLevel.getPlayerTopSelecionado()));
 
-            btns.backBtn.draw(Static.batch);
+            //btns.backBtn.draw(Static.batch);
+            //Static.batch.draw(btns.buttonPrev, btns.buttonPrevProps.get("x"), btns.buttonPrevProps.get("y"));
+            btns.drawButtonPrevBtn();
 
-            slime.slimeSpr.draw(Static.batch);
+            //slime.slimeSpr.draw(Static.batch);
+            /*Static.batch.draw(
+                    slime.slimes.get("green"),
+                    slime.slimePosition.get("x"),
+                    slime.slimePosition.get("y"));*/
+            //slime.drawSlime("green");
+            slime.drawSlime(
+                    slime.getSlimeColorEquipped(
+                            topLevel.topPlayersSlimeColorEquippedId.get(topLevel.getPlayerTopSelecionado()),
+                            topLevel.getEquippedItemState()));
+            slime.drawFace();
 
-            if(topLevel.topPlayersItemEquippedId.get(topLevel.getPlayerTopSelecionado()) != 0 && shop.itemsShopSprites.size() != 0){
-                item.renderItemsEquipped(false);
-            }
+            //if(topLevel.topPlayersItemEquippedId.get(topLevel.getPlayerTopSelecionado()) != 0 /*&& shop.itemsShopSprites.size() != 0*/){
+                item.renderItemsEquipped(1);
+            //}
 
         } else {
 
-            render.titleScreen("Top Level");
+            render.titleScreen(AllTextStringsLanguages.topLevel);
 
+            //Static.batch.draw(btns.btnMenu,btns.btnMenuX.get(0),btns.btnMenuY.get(0));
+            //Static.batch.draw(btns.btnMenu,btns.btnMenuX.get(1),btns.btnMenuY.get(1));
+            //Static.batch.draw(btns.btnMenu,btns.btnMenuX.get(2),btns.btnMenuY.get(2));
+
+            for (int i = 0; i < 5; i++) {
+                //Static.batch.draw(btns.btnMenu,btns.buttonMenuProps.get(i).get("x"),btns.buttonMenuProps.get(i).get("y"));
+                btns.drawMenuBtn(i);
+            }
+
+            /*
             btns.itemMenuBtns.get(0).draw(Static.batch);
             btns.itemMenuBtns.get(1).draw(Static.batch);
             btns.itemMenuBtns.get(2).draw(Static.batch);
             btns.itemMenuBtns.get(3).draw(Static.batch);
-            btns.itemMenuBtns.get(4).draw(Static.batch);
+            btns.itemMenuBtns.get(4).draw(Static.batch);*/
 
             if (menu.getMenuCurrentPage() == 1) {
 
                 for (int i = 0; i < 5; i++) {
                     render.itemMenuBtnsDoubleText(topLevel.topPlayers.get(i), topLevel.topPlayersLevel.get(i), false, i);
                 }
-
-                /*
-                render.itemMenuBtnsDoubleText0(topLevel.topPlayers.get(0), topLevel.topPlayersLevel.get(0), false);
-                render.itemMenuBtnsDoubleText1(topLevel.topPlayers.get(1), topLevel.topPlayersLevel.get(1), false);
-                render.itemMenuBtnsDoubleText2(topLevel.topPlayers.get(2), topLevel.topPlayersLevel.get(2), false);
-                render.itemMenuBtnsDoubleText3(topLevel.topPlayers.get(3), topLevel.topPlayersLevel.get(3), false);
-                render.itemMenuBtnsDoubleText4(topLevel.topPlayers.get(4), topLevel.topPlayersLevel.get(4), false);*/
-
             }
             if (menu.getMenuCurrentPage() == 2) {
 
                 for (int i = 5; i < 10; i++) {
                     render.itemMenuBtnsDoubleText(topLevel.topPlayers.get(i), topLevel.topPlayersLevel.get(i), false, i-5);
                 }
-
-                /*
-                render.itemMenuBtnsDoubleText0(topLevel.topPlayers.get(5), topLevel.topPlayersLevel.get(5), false);
-                render.itemMenuBtnsDoubleText1(topLevel.topPlayers.get(6), topLevel.topPlayersLevel.get(6), false);
-                render.itemMenuBtnsDoubleText2(topLevel.topPlayers.get(7), topLevel.topPlayersLevel.get(7), false);
-                render.itemMenuBtnsDoubleText3(topLevel.topPlayers.get(8), topLevel.topPlayersLevel.get(8), false);
-                render.itemMenuBtnsDoubleText4(topLevel.topPlayers.get(9), topLevel.topPlayersLevel.get(9), false);*/
-
             }
             if (menu.getMenuCurrentPage() == 3) {
 
                 for (int i = 10; i < 15; i++) {
                     render.itemMenuBtnsDoubleText(topLevel.topPlayers.get(i), topLevel.topPlayersLevel.get(i), false, i-10);
                 }
-
-                /*
-                render.itemMenuBtnsDoubleText0(topLevel.topPlayers.get(10), topLevel.topPlayersLevel.get(10), false);
-                render.itemMenuBtnsDoubleText1(topLevel.topPlayers.get(11), topLevel.topPlayersLevel.get(11), false);
-                render.itemMenuBtnsDoubleText2(topLevel.topPlayers.get(12), topLevel.topPlayersLevel.get(12), false);
-                render.itemMenuBtnsDoubleText3(topLevel.topPlayers.get(13), topLevel.topPlayersLevel.get(13), false);
-                render.itemMenuBtnsDoubleText4(topLevel.topPlayers.get(14), topLevel.topPlayersLevel.get(14), false);*/
-
             }
             if (menu.getMenuCurrentPage() == 4) {
 
                 for (int i = 15; i < 20; i++) {
                     render.itemMenuBtnsDoubleText(topLevel.topPlayers.get(i), topLevel.topPlayersLevel.get(i), false, i-15);
                 }
-
-                /*
-                render.itemMenuBtnsDoubleText0(topLevel.topPlayers.get(15), topLevel.topPlayersLevel.get(15), false);
-                render.itemMenuBtnsDoubleText1(topLevel.topPlayers.get(16), topLevel.topPlayersLevel.get(16), false);
-                render.itemMenuBtnsDoubleText2(topLevel.topPlayers.get(17), topLevel.topPlayersLevel.get(17), false);
-                render.itemMenuBtnsDoubleText3(topLevel.topPlayers.get(18), topLevel.topPlayersLevel.get(18), false);
-                render.itemMenuBtnsDoubleText4(topLevel.topPlayers.get(19), topLevel.topPlayersLevel.get(19), false);*/
-
             }
 
             render.pages(menu.getMenuCurrentPage() + "/4");

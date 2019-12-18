@@ -2,7 +2,6 @@ package com.slimeIdle.Controller;
 
 import com.slimeIdle.Model.Buttons;
 import com.slimeIdle.Model.Menu;
-import com.slimeIdle.Model.Static;
 import com.slimeIdle.Model.TopLevel;
 
 public class TouchScreenTopLevel {
@@ -10,128 +9,154 @@ public class TouchScreenTopLevel {
     Buttons btn;
     Menu menu;
     TopLevel topLevel;
-    private float screenX;
-    private float screenY;
+    //TouchScreenMenu touchScreenMenu;
+    //private float screenX;
+    //private float screenY;
 
-    public TouchScreenTopLevel(Buttons btn, Menu menu, TopLevel topLevel, float screenXRecebido, float screenYRecebido){
+    public TouchScreenTopLevel(Buttons btn, Menu menu, TopLevel topLevel/*, TouchScreenMenu touchScreenMenu*//*, float screenXRecebido, float screenYRecebido*/){
 
         this.btn = btn;
         this.menu = menu;
         this.topLevel = topLevel;
-        screenX = screenXRecebido;
-        screenY = screenYRecebido;
+        //this.touchScreenMenu = touchScreenMenu;
+        //screenX = screenXRecebido;
+        //screenY = screenYRecebido;
+    }
+
+    public void keyBack () {
+        if(menu.isMenu_topLevel()){
+            if(menu.isMenu_topLevel_PlayerSelecionado()){
+                menu.setMenu_topLevel_PlayerSelecionado(false);
+            } else {
+                menu.setMenu_topLevel(false);
+                menu.setMenu(false);
+            }
+        }
     }
 
     public boolean touch(){
 
         if(menu.isMenu_topLevel_PlayerSelecionado()) {
-            if(btn.backBtn.getBoundingRectangle().contains(screenX, (float) (screenY - ((Static.h/2.5)*2)))){
+            if(btn.buttonPrevCollision.contains(btn.touchPoint.x, btn.touchPoint.y)) {
                 menu.setMenu_topLevel_PlayerSelecionado(false);
+                return true;
             }
             return true;
         }
 
-        if(btn.itemMenuBtns.get(0).getBoundingRectangle().contains(screenX, screenY + ((Static.h/4) * 2))){
+        if(menu.getMenuCurrentPage() == 1) {
+            if(btn.buttonMenuCollision.get(0).contains(btn.touchPoint.x, btn.touchPoint.y)) {
 
-            menu.setMenu_topLevel_PlayerSelecionado(true);
-
-            if(menu.getMenuCurrentPage() == 1) {
+                menu.setMenu_topLevel_PlayerSelecionado(true);
                 topLevel.setPlayerTopSelecionado(0);
             }
-            if(menu.getMenuCurrentPage() == 2) {
-                topLevel.setPlayerTopSelecionado(5);
-            }
-            if(menu.getMenuCurrentPage() == 3) {
-                topLevel.setPlayerTopSelecionado(10);
-            }
-            if(menu.getMenuCurrentPage() == 4) {
-                topLevel.setPlayerTopSelecionado(15);
-            }
-        }
-        if(btn.itemMenuBtns.get(1).getBoundingRectangle().contains(screenX, screenY + ((Static.h/8) * 2))){
+            if(btn.buttonMenuCollision.get(1).contains(btn.touchPoint.x, btn.touchPoint.y)) {
 
-            menu.setMenu_topLevel_PlayerSelecionado(true);
-
-            if(menu.getMenuCurrentPage() == 1) {
+                menu.setMenu_topLevel_PlayerSelecionado(true);
                 topLevel.setPlayerTopSelecionado(1);
             }
-            if(menu.getMenuCurrentPage() == 2) {
-                topLevel.setPlayerTopSelecionado(6);
-            }
-            if(menu.getMenuCurrentPage() == 3) {
-                topLevel.setPlayerTopSelecionado(11);
-            }
-            if(menu.getMenuCurrentPage() == 4) {
-                topLevel.setPlayerTopSelecionado(16);
-            }
-        }
-        if(btn.itemMenuBtns.get(2).getBoundingRectangle().contains(screenX, screenY)){
+            if(btn.buttonMenuCollision.get(2).contains(btn.touchPoint.x, btn.touchPoint.y)) {
 
-            menu.setMenu_topLevel_PlayerSelecionado(true);
-
-            if(menu.getMenuCurrentPage() == 1) {
+                menu.setMenu_topLevel_PlayerSelecionado(true);
                 topLevel.setPlayerTopSelecionado(2);
             }
-            if(menu.getMenuCurrentPage() == 2) {
-                topLevel.setPlayerTopSelecionado(7);
-            }
-            if(menu.getMenuCurrentPage() == 3) {
-                topLevel.setPlayerTopSelecionado(12);
-            }
-            if(menu.getMenuCurrentPage() == 4) {
-                topLevel.setPlayerTopSelecionado(17);
-            }
-        }
-        if(btn.itemMenuBtns.get(3).getBoundingRectangle().contains(screenX, screenY - ((Static.h/8) * 2))){
+            if(btn.buttonMenuCollision.get(3).contains(btn.touchPoint.x, btn.touchPoint.y)) {
 
-            menu.setMenu_topLevel_PlayerSelecionado(true);
-
-            if(menu.getMenuCurrentPage() == 1) {
+                menu.setMenu_topLevel_PlayerSelecionado(true);
                 topLevel.setPlayerTopSelecionado(3);
             }
-            if(menu.getMenuCurrentPage() == 2) {
-                topLevel.setPlayerTopSelecionado(8);
-            }
-            if(menu.getMenuCurrentPage() == 3) {
-                topLevel.setPlayerTopSelecionado(13);
-            }
-            if(menu.getMenuCurrentPage() == 4) {
-                topLevel.setPlayerTopSelecionado(18);
-            }
-        }
-        if(btn.itemMenuBtns.get(4).getBoundingRectangle().contains(screenX, screenY - ((Static.h/4) * 2))){
+            if(btn.buttonMenuCollision.get(4).contains(btn.touchPoint.x, btn.touchPoint.y)) {
 
-            menu.setMenu_topLevel_PlayerSelecionado(true);
-
-            if(menu.getMenuCurrentPage() == 1) {
+                menu.setMenu_topLevel_PlayerSelecionado(true);
                 topLevel.setPlayerTopSelecionado(4);
             }
-            if(menu.getMenuCurrentPage() == 2) {
+        }
+
+        if(menu.getMenuCurrentPage() == 2) {
+            if(btn.buttonMenuCollision.get(0).contains(btn.touchPoint.x, btn.touchPoint.y)) {
+
+                menu.setMenu_topLevel_PlayerSelecionado(true);
+                topLevel.setPlayerTopSelecionado(5);
+            }
+            if(btn.buttonMenuCollision.get(1).contains(btn.touchPoint.x, btn.touchPoint.y)) {
+
+                menu.setMenu_topLevel_PlayerSelecionado(true);
+                topLevel.setPlayerTopSelecionado(6);
+            }
+            if(btn.buttonMenuCollision.get(2).contains(btn.touchPoint.x, btn.touchPoint.y)) {
+
+                menu.setMenu_topLevel_PlayerSelecionado(true);
+                topLevel.setPlayerTopSelecionado(7);
+            }
+            if(btn.buttonMenuCollision.get(3).contains(btn.touchPoint.x, btn.touchPoint.y)) {
+
+                menu.setMenu_topLevel_PlayerSelecionado(true);
+                topLevel.setPlayerTopSelecionado(8);
+            }
+            if(btn.buttonMenuCollision.get(4).contains(btn.touchPoint.x, btn.touchPoint.y)) {
+
+                menu.setMenu_topLevel_PlayerSelecionado(true);
                 topLevel.setPlayerTopSelecionado(9);
             }
-            if(menu.getMenuCurrentPage() == 3) {
+        }
+
+        if(menu.getMenuCurrentPage() == 3) {
+            if(btn.buttonMenuCollision.get(0).contains(btn.touchPoint.x, btn.touchPoint.y)) {
+
+                menu.setMenu_topLevel_PlayerSelecionado(true);
+                topLevel.setPlayerTopSelecionado(10);
+            }
+            if(btn.buttonMenuCollision.get(1).contains(btn.touchPoint.x, btn.touchPoint.y)) {
+
+                menu.setMenu_topLevel_PlayerSelecionado(true);
+                topLevel.setPlayerTopSelecionado(11);
+            }
+            if(btn.buttonMenuCollision.get(2).contains(btn.touchPoint.x, btn.touchPoint.y)) {
+
+                menu.setMenu_topLevel_PlayerSelecionado(true);
+                topLevel.setPlayerTopSelecionado(12);
+            }
+            if(btn.buttonMenuCollision.get(3).contains(btn.touchPoint.x, btn.touchPoint.y)) {
+
+                menu.setMenu_topLevel_PlayerSelecionado(true);
+                topLevel.setPlayerTopSelecionado(13);
+            }
+            if(btn.buttonMenuCollision.get(4).contains(btn.touchPoint.x, btn.touchPoint.y)) {
+
+                menu.setMenu_topLevel_PlayerSelecionado(true);
                 topLevel.setPlayerTopSelecionado(14);
             }
-            if(menu.getMenuCurrentPage() == 4) {
+        }
+
+        if(menu.getMenuCurrentPage() == 4) {
+            if(btn.buttonMenuCollision.get(0).contains(btn.touchPoint.x, btn.touchPoint.y)) {
+
+                menu.setMenu_topLevel_PlayerSelecionado(true);
+                topLevel.setPlayerTopSelecionado(15);
+            }
+            if(btn.buttonMenuCollision.get(1).contains(btn.touchPoint.x, btn.touchPoint.y)) {
+
+                menu.setMenu_topLevel_PlayerSelecionado(true);
+                topLevel.setPlayerTopSelecionado(16);
+            }
+            if(btn.buttonMenuCollision.get(2).contains(btn.touchPoint.x, btn.touchPoint.y)) {
+
+                menu.setMenu_topLevel_PlayerSelecionado(true);
+                topLevel.setPlayerTopSelecionado(17);
+            }
+            if(btn.buttonMenuCollision.get(3).contains(btn.touchPoint.x, btn.touchPoint.y)) {
+
+                menu.setMenu_topLevel_PlayerSelecionado(true);
+                topLevel.setPlayerTopSelecionado(18);
+            }
+            if(btn.buttonMenuCollision.get(4).contains(btn.touchPoint.x, btn.touchPoint.y)) {
+
+                menu.setMenu_topLevel_PlayerSelecionado(true);
                 topLevel.setPlayerTopSelecionado(19);
             }
         }
 
-        if(btn.prevBtn.getBoundingRectangle().contains(screenX, (float) (screenY - ((Static.h / 2.5)*2)))){
-            if(menu.getMenuCurrentPage() == 1) {
-                return true;
-            }
-            menu.setMenuCurrentPage(menu.getMenuCurrentPage() - 1);
-        }
-
-        if(btn.nextBtn.getBoundingRectangle().contains(screenX,(float) (screenY - ((Static.h / 2.5)*2)))){
-            if(menu.getMenuCurrentPage() == 4) {
-                return true;
-            }
-            menu.setMenuCurrentPage(menu.getMenuCurrentPage() + 1);
-        }
-
-        return true;
+        return false;
     }
 
 }

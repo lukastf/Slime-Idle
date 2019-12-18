@@ -1,5 +1,12 @@
 exports.topLevel = function(data, players, socket){
-    topLevelRes = players.find({}, {"nickname":1, "level":1, "itemEquipped":1, "_id":0}).sort({ level: -1 }).limit(20).toArray(function(err, res){
+    topLevelRes = players.find({}, 
+        {"nickname":1, 
+        "level":1, 
+        "itemEquipped":1,
+        "slimeColorEquipped":1,
+        "backgroundEquipped":1,
+        "_id":0
+    }).sort({ level: -1 }).limit(20).toArray(function(err, res){
         if(err){
             throw err;
         }

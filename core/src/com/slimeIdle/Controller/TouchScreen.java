@@ -12,9 +12,7 @@ import com.slimeIdle.Model.Menu;
 import com.slimeIdle.Model.PurchaseManager;
 import com.slimeIdle.Model.Shop;
 import com.slimeIdle.Model.SocketSlime;
-import com.slimeIdle.Model.Static;
 import com.slimeIdle.Model.TopLevel;
-import com.slimeIdle.Slime;
 
 public class TouchScreen {
 
@@ -31,6 +29,19 @@ public class TouchScreen {
     TopLevel topLevel;
     Coin coin;
     Encryption encryption;
+    Loader loader;
+
+    TouchScreenSlime touchScreenSlime;
+    TouchScreenMenu touchScreenMenu;
+    TouchScreenLanguage touchScreenLanguage;
+    TouchScreenBackgroundShop touchScreenBackgroundShop;
+    TouchScreenSlimeColorShop touchScreenSlimeColorShop;
+    TouchScreenCartShop touchScreenCartShop;
+    TouchScreenCoinShop touchScreenCoinShop;
+    TouchScreenTopLevel touchScreenTopLevel;
+    TouchScreenLoginScreen touchScreenLoginScreen;
+    TouchScreenLogoutScreen touchScreenLogoutScreen;
+
 
     public TouchScreen(
             Menu menu,
@@ -45,7 +56,8 @@ public class TouchScreen {
             PurchaseManager purchaseManager,
             TopLevel topLevel,
             Coin coin,
-            Encryption encryption){
+            Encryption encryption,
+            Loader loader){
 
         this.menu = menu;
         this.acc = acc;
@@ -60,158 +72,95 @@ public class TouchScreen {
         this.topLevel = topLevel;
         this.coin = coin;
         this.encryption = encryption;
+        this.loader = loader;
     }
 
+
+
     public void touchScreen() {
+
+        touchScreenSlime = new TouchScreenSlime(btn,fbLogin,acc,menu,socketSlime,slime,coin);
+        touchScreenMenu = new TouchScreenMenu(acc,btn,fbLogin,menu,item,socketSlime,listener);
+        touchScreenBackgroundShop = new TouchScreenBackgroundShop(slime, menu, btn, item, shop, socketSlime);
+        touchScreenSlimeColorShop = new TouchScreenSlimeColorShop(slime, menu, btn, item, shop, socketSlime);
+        touchScreenCartShop = new TouchScreenCartShop(slime, menu, btn, item, shop, socketSlime);
+        touchScreenCoinShop = new TouchScreenCoinShop(btn, menu,socketSlime,purchaseManager);
+        touchScreenTopLevel = new TouchScreenTopLevel(btn, menu, topLevel);
+        touchScreenLoginScreen = new TouchScreenLoginScreen(acc, btn, socketSlime, listener, item, encryption);
+        touchScreenLanguage = new TouchScreenLanguage(slime, menu, btn, item, shop, socketSlime,loader,acc);
+        touchScreenLogoutScreen = new TouchScreenLogoutScreen(btn,menu,fbLogin,acc);
+
         // touch screen
         Gdx.input.setInputProcessor(new InputAdapter(){
 
             @Override
             public boolean keyDown(int keycode) {
+
                 if(keycode == Input.Keys.BACK){
 
-                    //cart
-                    if(menu.isMenu_cart()){
-                        if(menu.isMenu_item_selecionado()){
-                            menu.setMenu_item_selecionado(false);
-                        } else {
-                            menu.setMenu_cart(false);
-                            menu.setMenu(false);
-                        }
-                    }
-
-                    // top level
-                    if(menu.isMenu_topLevel()){
-                        if(menu.isMenu_topLevel_PlayerSelecionado()){
-                            menu.setMenu_topLevel_PlayerSelecionado(false);
-                        } else {
-                            menu.setMenu_topLevel(false);
-                            menu.setMenu(false);
-                        }
-                    }
-
-                    //coin
-                    if(menu.isMenu_coin()){
-                        menu.setMenu_coin(false);
-                        menu.setMenu(false);
-                    }
-
-                    menu.setMenu_item_BuySuccess(false);
-                    menu.setMenu_item_BuyError_ready(false);
-                    menu.setMenu_item_BuyError_money(false);
-                    menu.setMenuCurrentPage(1);
+                    touchScreenLogoutScreen.keyBack();
+                    touchScreenLanguage.keyBack();
+                    touchScreenLoginScreen.keyBack();
+                    touchScreenCartShop.keyBack();
+                    touchScreenTopLevel.keyBack();
+                    touchScreenCoinShop.keyBack();
+                    touchScreenMenu.keyBack();
+                    touchScreenBackgroundShop.keyBack();
+                    touchScreenSlimeColorShop.keyBack();
                 }
                 return false;
             }
 
             @Override
             public boolean touchUp(int screenX, int screenY, int pointer, int button) {
+
                 if(acc.isLogin() || acc.loginPause == true) {
-                    if(acc.getNickname().isEmpty() || acc.isSetNicknameSuccess() || acc.isSetNicknameError()) {
 
-                        if(!acc.isSetNicknameSuccess() && !acc.isSetNicknameError()) {
-                            if (btn.closeWindowBtn.getBoundingRectangle().contains(screenX, (float) (screenY + ((Static.h / 2.3) * 2)))) {
-                                fbLogin.getlogout();
-                                acc.logout();
-                            }
+                    if (touchScreenMenu.checkNickname()) return true;
+                    if (touchScreenMenu.menu(
+                            touchScreenBackgroundShop,touchScreenSlimeColorShop,
+                            touchScreenCartShop,touchScreenCoinShop,touchScreenTopLevel,
+                            touchScreenLanguage, touchScreenLogoutScreen)) return true;
+                    if(touchScreenSlime.buttonsCollision()) return true;
+                    return true;
+                }
 
-                            if (btn.itemMenuBtns.get(1).getBoundingRectangle().contains(screenX, screenY + ((Static.h / 8) * 2))) {
-                                item.setItemSelecionado(1);
-                                Gdx.input.getTextInput(listener, "Nickname", "", "Insert your Nickname");
-                            }
-
-                            if (btn.itemMenuBtns.get(2).getBoundingRectangle().contains(screenX, screenY)) {
-                                socketSlime.setNickname();
-                            }
-                        }
-                        if(acc.isSetNicknameSuccess() || acc.isSetNicknameError()) {
-                            if(btn.itemMenuBtns.get(4).getBoundingRectangle().contains(screenX, screenY - ((Static.h/4) * 2))){
-                                acc.setSetNicknameSuccess(false);
-                                acc.setSetNicknameError(false);
-                            }
-                        }
+                if (touchScreenMenu.menu(
+                        touchScreenBackgroundShop,touchScreenSlimeColorShop,
+                        touchScreenCartShop,touchScreenCoinShop,touchScreenTopLevel,
+                        touchScreenLanguage, touchScreenLogoutScreen)) return true;
 
 
-                    } else {
-                        if (menu.isMenu()) {
-                            if (!menu.isMenu_item_BuySuccess() && !menu.isMenu_item_BuyError_ready() && !menu.isMenu_item_BuyError_money()) {
-                                if (btn.closeWindowBtn.getBoundingRectangle().contains(screenX, (float) (screenY + ((Static.h / 2.3) * 2)))) {
-                                    menu.setMenu(false);
-                                    menu.setMenu_cart(false);
-                                    menu.setMenu_coin(false);
-                                    menu.setMenu_topLevel(false);
-                                    menu.setMenu_topLevel_PlayerSelecionado(false);
-                                    menu.setMenu_item_selecionado(false);
-                                    menu.setMenu_item_BuySuccess(false);
-                                    menu.setMenu_item_BuyError_ready(false);
-                                    menu.setMenu_item_BuyError_money(false);
-                                    menu.setMenuCurrentPage(1);
-                                    return true;
-                                }
-                            }
-                            if (menu.isMenu_cart()) {
-                                TouchScreenCart touchScreenCart = new TouchScreenCart(slime, menu, btn, item, shop, socketSlime, screenX, screenY);
-                                touchScreenCart.touch();
-                            }
-                            if (menu.isMenu_coin()) {
-                                TouchScreenCoin touchScreenCoin = new TouchScreenCoin(btn, socketSlime, purchaseManager, screenX, screenY);
-                                touchScreenCoin.touch();
-                            }
-                            if (menu.isMenu_topLevel()) {
-                                TouchScreenTopLevel touchScreenTopLevel = new TouchScreenTopLevel(btn, menu, topLevel,screenX, screenY);
-                                touchScreenTopLevel.touch();
-                            }
 
-                        } else {
+                /*
+                if (btn.buttonCloseCollision.contains(btn.touchPoint.x, btn.touchPoint.y)) {
+                    menu.setMenu(false);
+                    touchScreenMenu.closeButton();
+                    return true;
+                }*/
 
-                            if (btn.closeWindowBtn.getBoundingRectangle().contains(screenX, (float) (screenY + ((Static.h / 2.3) * 2)))) {
-                                fbLogin.getlogout();
-                                acc.logout();
-                                return true;
-                            }
+                if(touchScreenLoginScreen.touch()) return true;
 
-                            if (btn.cartBtn.getBoundingRectangle().contains(screenX, screenY - ((Static.h / 3) * 2))) {
-                                menu.setMenu(true);
-                                menu.setMenu_cart(true);
-                                return true;
-                            }
+                if (btn.buttonLanguageCollision.contains(btn.touchPoint.x, btn.touchPoint.y)) {
+                    menu.setMenu(true);
+                    menu.setMenu_language(true);
+                    return true;
+                }
 
-                            if (btn.coinBtn.getBoundingRectangle().contains(screenX, screenY - ((Static.h / 3) * 2))) {
-                                menu.setMenu(true);
-                                menu.setMenu_coin(true);
-                                return true;
-                            }
+                touchScreenSlime.buttonsCollisionLogin();
 
-                            if (btn.topLevelBtn.getBoundingRectangle().contains(screenX, screenY - ((Static.h / 3) * 2))) {
-                                menu.setMenu(true);
-                                menu.setMenu_topLevel(true);
-                                socketSlime.topLevel();
-                                return true;
-                            }
-                            if(slime.getLastTimeTouch().contains("READY!")){
-                                coin.freeCoin = true;
-                            }
+                return true;
+            }
 
-                            socketSlime.screenPressed();
-                        }
-                    }
-                } else {
+            @Override
+            public boolean touchDown(int screenX, int screenY, int pointer, int button) {
 
-                    if (acc.isLoginScreen()) {
-                        TouchScreenLoginScreen touchScreenLoginScreen = new TouchScreenLoginScreen(acc, btn, socketSlime, screenX, screenY, listener, item, encryption);
-                        touchScreenLoginScreen.touch();
-                    } else {
+                if(acc.isLogin() || acc.loginPause == true) {
+                    return true;
+                }
 
-                        if(btn.itemMenuBtns.get(4).getBoundingRectangle().contains(screenX, screenY - ((Static.h/4) * 2))){
-                            acc.setLoginScreen(true);
-                        }
-
-                        if (btn.loginButtonBtn.getBoundingRectangle().contains(screenX, screenY - ((float)(Static.h / 2.5) * 2))) {
-                            fbLogin.getlogin();
-                            return true;
-                        }
-                    }
-
+                if (!acc.isLoginScreen()) {
+                    slime.stateSleep = false;
                 }
 
                 return true;

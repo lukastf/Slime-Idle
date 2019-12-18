@@ -2,6 +2,7 @@ package com.slimeIdle.Model;
 
 import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.utils.Array;
+import com.slimeIdle.View.AllTextStringsLanguages;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -16,9 +17,9 @@ public class Account {
     public String[] id = {"",""};
     public String[] pass = {"",""};
 
-    private String nome = "";
+    //private String nome = "";
     private String fbId = "";
-    private String nickname = ">Insert Nickname<";
+    private String nickname = "";
     private String password = "";
 
     private boolean conectado = false;
@@ -41,7 +42,7 @@ public class Account {
     private boolean autoLoginFinished = false;
 
     public ArrayList<String> createAccountStrings = new ArrayList<String>();
-    public ArrayList<String> passwordsHidden = new ArrayList<String>();
+    public ArrayList<String> loginStrings = new ArrayList<String>();
     public Array<String> getPermissionsRead() {
         return permissionsRead;
     }
@@ -74,12 +75,12 @@ public class Account {
         this.autoLoginFinished = autoLoginFinished;
     }
 
-    public String getNome() {
-        return nome;
-    }
-    public void setNome(String nome) {
-        this.nome = nome;
-    }
+    //public String getNome() {
+        //return nome;
+    //}
+    //public void setNome(String nome) {
+        //this.nome = nome;
+    //}
 
     public String getFbId() {
         return fbId;
@@ -175,9 +176,9 @@ public class Account {
     }
 
     public void logout(){
-        setNome("");
+        //setNome("");
         setFbId("");
-        setNickname(">Insert Nickname<");
+        setNickname("");
         setPassword("");
         id[0] = "";
         id[1] = "";
@@ -185,14 +186,17 @@ public class Account {
         pass[0] = "";
         pass[1]= "";
 
-        createAccountStrings.set(0, "> Name <");
-        createAccountStrings.set(1, "> Nickname <");
-        createAccountStrings.set(2, "> Password <");
-        createAccountStrings.set(3, "> Password Again <");
+        loginStrings.set(0, AllTextStringsLanguages.loginStrings.get(0));
+        loginStrings.set(1, AllTextStringsLanguages.loginStrings.get(1));
 
-        passwordsHidden.set(0, "> Insert Password <");
-        passwordsHidden.set(1, "> Password <");
-        passwordsHidden.set(2, "> Password Again <");
+        createAccountStrings.set(0, AllTextStringsLanguages.createAccountStrings.get(0));
+        createAccountStrings.set(1, AllTextStringsLanguages.createAccountStrings.get(1));
+        createAccountStrings.set(2, AllTextStringsLanguages.createAccountStrings.get(2));
+        createAccountStrings.set(3, AllTextStringsLanguages.createAccountStrings.get(3));
+        createAccountStrings.set(4, AllTextStringsLanguages.createAccountStrings.get(4));
+        //createAccountStrings.set(5, AllTextStringsLanguages.createAccountStrings.get(5));
+
+
 
         setLoginSuccess(false);
         setLoginError(false);
@@ -205,15 +209,34 @@ public class Account {
         loginPause = false;
     }
 
-    public void addCreateAccountStrings (){
-        createAccountStrings.add("> Name <");
-        createAccountStrings.add("> Nickname <");
-        createAccountStrings.add("> Password <");
-        createAccountStrings.add("> Password Again <");
+    public void initializer() {
+        this.addCreateAccountStrings();
+    }
 
-        passwordsHidden.add("> Insert Password <");
-        passwordsHidden.add("> Password <");
-        passwordsHidden.add("> Password Again <");
+    private void addCreateAccountStrings (){
+
+        loginStrings.add(AllTextStringsLanguages.loginStrings.get(0));
+        loginStrings.add(AllTextStringsLanguages.loginStrings.get(1));
+
+        createAccountStrings.add(AllTextStringsLanguages.createAccountStrings.get(0));
+        createAccountStrings.add(AllTextStringsLanguages.createAccountStrings.get(1));
+        createAccountStrings.add(AllTextStringsLanguages.createAccountStrings.get(2));
+        createAccountStrings.add(AllTextStringsLanguages.createAccountStrings.get(3));
+        createAccountStrings.add(AllTextStringsLanguages.createAccountStrings.get(4));
+        //createAccountStrings.add(AllTextStringsLanguages.createAccountStrings.get(5));
+    }
+
+    public void setCreateAccountStrings () {
+
+        loginStrings.set(0,AllTextStringsLanguages.loginStrings.get(0));
+        loginStrings.set(1,AllTextStringsLanguages.loginStrings.get(1));
+
+        createAccountStrings.set(0,AllTextStringsLanguages.createAccountStrings.get(0));
+        createAccountStrings.set(1,AllTextStringsLanguages.createAccountStrings.get(1));
+        createAccountStrings.set(2,AllTextStringsLanguages.createAccountStrings.get(2));
+        createAccountStrings.set(3,AllTextStringsLanguages.createAccountStrings.get(3));
+        createAccountStrings.set(4,AllTextStringsLanguages.createAccountStrings.get(4));
+
     }
 
     // socket io
@@ -222,7 +245,7 @@ public class Account {
 
         JSONObject enviar = new JSONObject();
         try {
-            enviar.put("name", getNome());
+            //enviar.put("name", getNome());
             if(getFbId() != ""){
                 enviar.put("fbId1", id[0]);
                 enviar.put("fbId2", id[1]);
@@ -256,7 +279,7 @@ public class Account {
     public void pingado(Socket socket) {
         JSONObject enviar = new JSONObject();
         try {
-            enviar.put("name", getNome());
+            //enviar.put("name", getNome());
             enviar.put("fbId1", id[0]);
             enviar.put("fbId2", id[1]);
 
@@ -275,12 +298,17 @@ public class Account {
 
         JSONObject enviar = new JSONObject();
         try {
-            enviar.put("name", createAccountStrings.get(0));
-            enviar.put("nickname", createAccountStrings.get(1));
+            //enviar.put("name", createAccountStrings.get(0));
+            enviar.put("nickname", createAccountStrings.get(0));
             enviar.put("password1", pass[0]);
             enviar.put("password2", pass[1]);
 
             socket.emit("createAccount", enviar);
+
+            //enviar.remove("nickname");
+            //enviar.remove("password1");
+            //enviar.remove("password2");
+
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -291,14 +319,18 @@ public class Account {
                 setCreateAccountSuccess(true);
                 socket.disconnect();
 
-                createAccountStrings.set(0, "> Name <");
-                createAccountStrings.set(1, "> Nickname <");
-                createAccountStrings.set(2, "> Password <");
-                createAccountStrings.set(3, "> Password Again <");
+                loginStrings.set(0, AllTextStringsLanguages.loginStrings.get(0));
+                loginStrings.set(1, AllTextStringsLanguages.loginStrings.get(1));
 
-                passwordsHidden.set(0, "> Insert Password <");
-                passwordsHidden.set(1, "> Password <");
-                passwordsHidden.set(2, "> Password Again <");
+                //createAccountStrings.set(0, "> Name <");
+                createAccountStrings.set(0, AllTextStringsLanguages.createAccountStrings.get(0));
+                createAccountStrings.set(1, AllTextStringsLanguages.createAccountStrings.get(1));
+                createAccountStrings.set(2, AllTextStringsLanguages.createAccountStrings.get(2));
+                createAccountStrings.set(3, AllTextStringsLanguages.createAccountStrings.get(3));
+                createAccountStrings.set(4, AllTextStringsLanguages.createAccountStrings.get(4));
+
+
+                //loginStrings.set(2, "> Password Again <");
 
                 setPassword("");
                 pass = null;
@@ -312,8 +344,8 @@ public class Account {
                 setCreateAccountError(true);
                 socket.disconnect();
 
-                setNickname(">Insert Nickname<");
-                passwordsHidden.set(0, "> Insert Password <");
+                setNickname(AllTextStringsLanguages.loginStrings.get(0));
+                loginStrings.set(0, AllTextStringsLanguages.loginStrings.get(1));
                 setPassword("");
                 pass = null;
             }
@@ -343,14 +375,14 @@ public class Account {
 
                 JSONObject data = (JSONObject) args[0];
                 try {
-                    setNome(data.getString("name"));
+                    //setNome(data.getString("name"));
                     setFbId(data.getString("fbId"));
                     id = encryption.encryptIn2(encryption.decrypt(data.getString("fbId")));
                     setNickname(data.getString("nickname"));
                     setPassword(data.getString("password"));
                     pass = encryption.encryptIn2(encryption.decrypt(data.getString("password")));
 
-                    getPrefs().putString("name", getNome());
+                    //getPrefs().putString("name", getNome());
                     getPrefs().putString("fbId", getFbId());
                     getPrefs().putString("nickname", getNickname());
                     getPrefs().putString("password", getPassword());
@@ -377,10 +409,10 @@ public class Account {
 
         JSONObject enviar = new JSONObject();
         try {
-            enviar.put("name", getNome());
+            //enviar.put("name", getNome());
             enviar.put("fbId1", id[0]);
             enviar.put("fbId2", id[1]);
-            enviar.put("nickname", createAccountStrings.get(1));
+            enviar.put("nickname", createAccountStrings.get(0));
 
             socket.emit("setNickname", enviar);
         } catch (JSONException e) {
@@ -402,5 +434,4 @@ public class Account {
     public void setNicknameError(Object... args) {
         setSetNicknameError(true);
     }
-
 }

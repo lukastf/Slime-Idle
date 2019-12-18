@@ -19,7 +19,7 @@ public class CommonLogin {
     public void getAutoLogin(){
         if(!acc.isAutoLoginFinished() && !acc.getPrefs().getString("fbId").isEmpty()){
             acc.setAutoLoginFinished(true);
-            acc.setNome(acc.getPrefs().getString("name"));
+            //acc.setNome(acc.getPrefs().getString("name"));
             acc.setFbId(acc.getPrefs().getString("fbId"));
             acc.id = encr.encryptIn2(encr.decrypt(acc.getFbId()));
             acc.setNickname(acc.getPrefs().getString("nickname"));

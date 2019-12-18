@@ -6,14 +6,14 @@ import com.slimeIdle.Model.Buttons;
 import com.slimeIdle.Model.Encryption;
 import com.slimeIdle.Model.Item;
 import com.slimeIdle.Model.SocketSlime;
-import com.slimeIdle.Model.Static;
+import com.slimeIdle.View.AllTextStringsLanguages;
 
 public class TouchScreenLoginScreen {
     Account acc;
     Buttons btn;
     SocketSlime socketSlime;
-    private float screenX;
-    private float screenY;
+    //private float screenX;
+    //private float screenY;
     InputListener listener;
     Item item;
     Encryption encryption;
@@ -22,8 +22,8 @@ public class TouchScreenLoginScreen {
             Account acc,
             Buttons btn,
             SocketSlime socketSlime,
-            float screenX,
-            float screenY,
+            //float screenX,
+            //float screenY,
             InputListener listener,
             Item item,
             Encryption encryption){
@@ -31,113 +31,130 @@ public class TouchScreenLoginScreen {
         this.acc = acc;
         this.btn = btn;
         this.socketSlime = socketSlime;
-        this.screenX = screenX;
-        this.screenY = screenY;
+        //this.screenX = screenX;
+        //this.screenY = screenY;
         this.listener = listener;
         this.item = item;
         this.encryption = encryption;
     }
 
+    public void keyBack () {
+        if(acc.isLoginScreen()){
+            if(acc.isCreateAccount()){
+                acc.setCreateAccount(false);
+            } else {
+                acc.setLoginScreen(false);
+                //menu.setMenu(false);
+            }
+        }
+    }
+
     public boolean touch(){
 
-        if(!acc.isCreateAccountSuccess() && !acc.isCreateAccountError() && !acc.isCreateAccountErrorPass()
-                && !acc.isLoginSuccess() && !acc.isLoginError()){
-            if (btn.closeWindowBtn.getBoundingRectangle().contains(screenX, (float) (screenY + ((Static.h / 2.3) * 2)))) {
-                acc.setLoginScreen(false);
-                acc.setCreateAccount(false);
-                return true;
-            }
-        }
-        if(acc.isCreateAccount()){
+        if (acc.isLoginScreen()) {
 
-            if(!acc.isCreateAccountSuccess() && !acc.isCreateAccountError() && !acc.isCreateAccountErrorPass()) {
-
-                if (btn.backBtn.getBoundingRectangle().contains(screenX, (float) (screenY - ((Static.h / 2.5) * 2)))) {
+            if (!acc.isCreateAccountSuccess() && !acc.isCreateAccountError() && !acc.isCreateAccountErrorPass()
+                    && !acc.isLoginSuccess() && !acc.isLoginError()) {
+                if (btn.buttonCloseCollision.contains(btn.touchPoint.x, btn.touchPoint.y)) {
+                    acc.setLoginScreen(false);
                     acc.setCreateAccount(false);
+                    return true;
                 }
+            }
+            if (acc.isCreateAccount()) {
 
+                if (!acc.isCreateAccountSuccess() && !acc.isCreateAccountError() && !acc.isCreateAccountErrorPass()) {
 
-                if (btn.itemMenuBtns.get(0).getBoundingRectangle().contains(screenX, screenY + ((Static.h / 4) * 2))) {
-                    item.setItemSelecionado(0);
-                    Gdx.input.getTextInput(listener, "Name", "", "Insert your Name");
-                }
-
-                if (btn.itemMenuBtns.get(1).getBoundingRectangle().contains(screenX, screenY + ((Static.h / 8) * 2))) {
-                    item.setItemSelecionado(1);
-                    Gdx.input.getTextInput(listener, "Nickname", "", "Insert your Nickname");
-                }
-
-                if (btn.itemMenuBtns.get(2).getBoundingRectangle().contains(screenX, screenY)) {
-                    item.setItemSelecionado(2);
-                    Gdx.input.getTextInput(listener, "Password", "", "Insert your Password");
-                }
-
-                if (btn.itemMenuBtns.get(3).getBoundingRectangle().contains(screenX, screenY - ((Static.h / 8) * 2))) {
-                    item.setItemSelecionado(3);
-                    Gdx.input.getTextInput(listener, "re-enter Password", "", "Insert your Password again");
-                }
-
-                if (btn.itemMenuBtns.get(4).getBoundingRectangle().contains(screenX, screenY - ((Static.h / 4) * 2))) {
-
-                    if (acc.createAccountStrings.get(2).matches(acc.createAccountStrings.get(3))) {
-                        socketSlime.createAccount();
-                    } else {
-                        acc.setCreateAccountErrorPass(true);
+                    if (btn.buttonPrevCollision.contains(btn.touchPoint.x, btn.touchPoint.y)) {
+                        acc.setCreateAccount(false);
                     }
 
-                }
 
-                return true;
+                    //if (btn.buttonMenuCollision.get(0).contains(btn.touchPoint.x, btn.touchPoint.y)) {
+                    //    item.setItemId(0);
+                    //Gdx.input.getTextInput(listener, AllTextStringsLanguages.name, "", AllTextStringsLanguages.insertYourName);
+                    //}
 
-            }
-            if(acc.isCreateAccountSuccess() || acc.isCreateAccountError() || acc.isCreateAccountErrorPass()) {
-                if(btn.itemMenuBtns.get(4).getBoundingRectangle().contains(screenX, screenY - ((Static.h/4) * 2))){
-                    acc.setCreateAccountSuccess(false);
-                    acc.setCreateAccountError(false);
-                    acc.setCreateAccountErrorPass(false);
-                }
-            }
-
-        } else {
-
-            if(!acc.isLoginSuccess() && !acc.isLoginError()) {
-                if (btn.itemMenuBtns.get(1).getBoundingRectangle().contains(screenX, screenY + ((Static.h / 8) * 2))) {
-                    item.setItemSelecionado(-1);
-                    Gdx.input.getTextInput(listener, "Nickname", "", "Insert your Nickname");
-                }
-
-                if (btn.itemMenuBtns.get(2).getBoundingRectangle().contains(screenX, screenY)) {
-                    item.setItemSelecionado(-2);
-                    Gdx.input.getTextInput(listener, "Password", "", "Insert your Password");
-                }
-
-                if (btn.itemMenuBtns.get(3).getBoundingRectangle().contains(screenX, screenY - ((Static.h / 8) * 2))) {
-                    acc.pass = encryption.encryptIn2(encryption.decrypt(acc.getPassword()));
-                    socketSlime.loginAccount();
-                }
-
-                if (btn.itemMenuBtns.get(4).getBoundingRectangle().contains(screenX, screenY - ((Static.h / 4) * 2))) {
-                    acc.setCreateAccount(true);
-                }
-
-                return true;
-
-            }
-            if(acc.isLoginSuccess() || acc.isLoginError()) {
-                if(btn.itemMenuBtns.get(4).getBoundingRectangle().contains(screenX, screenY - ((Static.h/4) * 2))){
-
-                    if(acc.isLoginSuccess() && !acc.isLoginError()) {
-                        socketSlime.connectSocket();
-                        socketSlime.configSocketEvents();
-                        acc.setLoginSuccess(false);
-                        acc.setLogin(true);
+                    if (btn.buttonMenuCollision.get(1).contains(btn.touchPoint.x, btn.touchPoint.y)) {
+                        item.setItemId(1);
+                        Gdx.input.getTextInput(listener, AllTextStringsLanguages.nickname, "", AllTextStringsLanguages.insertYourNickname);
                     }
 
-                    acc.setLoginError(false);
+                    if (btn.buttonMenuCollision.get(2).contains(btn.touchPoint.x, btn.touchPoint.y)) {
+                        item.setItemId(2);
+                        Gdx.input.getTextInput(listener, AllTextStringsLanguages.password, "", AllTextStringsLanguages.insertYourPassword);
+                    }
+
+                    if (btn.buttonMenuCollision.get(3).contains(btn.touchPoint.x, btn.touchPoint.y)) {
+                        item.setItemId(3);
+                        Gdx.input.getTextInput(listener, AllTextStringsLanguages.passwordAgain, "", AllTextStringsLanguages.insertYourPasswordAgain);
+                    }
+
+                    if (btn.buttonMenuCollision.get(4).contains(btn.touchPoint.x, btn.touchPoint.y)) {
+
+                        if (acc.createAccountStrings.get(3).matches(acc.createAccountStrings.get(4))) {
+                            socketSlime.createAccount();
+                        } else {
+                            acc.setCreateAccountErrorPass(true);
+                        }
+
+                    }
+
+                    return true;
+
+                }
+                if (acc.isCreateAccountSuccess() || acc.isCreateAccountError() || acc.isCreateAccountErrorPass()) {
+                    if (btn.buttonMenuCollision.get(4).contains(btn.touchPoint.x, btn.touchPoint.y)) {
+                        acc.setCreateAccountSuccess(false);
+                        acc.setCreateAccountError(false);
+                        acc.setCreateAccountErrorPass(false);
+                    }
+                }
+
+            } else {
+
+                if (!acc.isLoginSuccess() && !acc.isLoginError()) {
+                    if (btn.buttonMenuCollision.get(1).contains(btn.touchPoint.x, btn.touchPoint.y)) {
+                        item.setItemId(-1);
+                        Gdx.input.getTextInput(listener, AllTextStringsLanguages.nickname, "", AllTextStringsLanguages.insertYourNickname);
+                    }
+
+                    if (btn.buttonMenuCollision.get(2).contains(btn.touchPoint.x, btn.touchPoint.y)) {
+                        item.setItemId(-2);
+                        Gdx.input.getTextInput(listener, AllTextStringsLanguages.password, "", AllTextStringsLanguages.insertYourPassword);
+                    }
+
+                    if (btn.buttonMenuCollision.get(3).contains(btn.touchPoint.x, btn.touchPoint.y)) {
+                        acc.pass = encryption.encryptIn2(encryption.decrypt(acc.getPassword()));
+                        socketSlime.loginAccount();
+                    }
+
+                    if (btn.buttonMenuCollision.get(4).contains(btn.touchPoint.x, btn.touchPoint.y)) {
+                        acc.setCreateAccount(true);
+                    }
+
+                    return true;
+
+                }
+                if (acc.isLoginSuccess() || acc.isLoginError()) {
+
+                    if (btn.buttonMenuCollision.get(4).contains(btn.touchPoint.x, btn.touchPoint.y)) {
+
+                        if (acc.isLoginSuccess() && !acc.isLoginError()) {
+                            socketSlime.connectSocket();
+                            socketSlime.configSocketEvents();
+                            acc.setLoginSuccess(false);
+                            acc.setLogin(true);
+                        }
+
+                        acc.setLoginError(false);
+                    }
                 }
             }
+
+            return true;
         }
 
-        return true;
+        return false;
     }
 }

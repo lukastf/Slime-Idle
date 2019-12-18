@@ -1,27 +1,38 @@
 package com.slimeIdle.Model;
 
-import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.utils.ArrayMap;
 
 public class Window {
 
     // Textures
-    public Texture reconnectWindow;
-    public Texture window;
-    public Texture closeWindow;
+    public TextureRegion reconnectWindow;
+    public TextureRegion window;
 
-    // Sprites
+    public ArrayMap<String,Float> reconnectWindowPosition = new ArrayMap<String, Float>();
+    public ArrayMap<String,Float> windowPosition = new ArrayMap<String, Float>();
 
-    public Sprite reconnectWindowSpr;
-    public Sprite windowSpr;
+    public void drawReconnectWindow() {
 
-    private int currentPage = 1;
-    private int playerTopSelecionado = 0;
-    private int itemSelecionado = 0;
+        Static.batch.draw(
+                reconnectWindow,
+                reconnectWindowPosition.get("x"),
+                reconnectWindowPosition.get("y"),
+                reconnectWindowPosition.get("width"),
+                reconnectWindowPosition.get("height"));
+    }
+
+    public void drawWindow () {
+
+        Static.batch.draw(
+                window,
+                windowPosition.get("x"),
+                windowPosition.get("y"),
+                windowPosition.get("width"),
+                windowPosition.get("height"));
+    }
 
     public void dispose() {
-        reconnectWindow.dispose();
-        window.dispose();
-        closeWindow.dispose();
+        // esta no buttons
     }
 }

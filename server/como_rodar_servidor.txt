@@ -4,6 +4,10 @@ Segundo digite "node index"
 sudo mongod --auth --port 27017 --dbpath /data/db
 sudo mongo --port 27017 -u "root2" -p "@@Lu17101995" --authenticationDatabase "admin"
 
+// resumido
+sudo mongod --auth
+sudo mongo -u "root2" -p "@@Lu17101995" --authenticationDatabase "admin"
+
 use admin
 db.createUser(
   {

@@ -23,7 +23,7 @@ const buyCoins = require('./shop/buyCoins');
 
 // Connect to mongo
 mongo.connect('mongodb://root:%40%40Lu17101995@localhost/admin',
-{ useNewUrlParser: true}, function(err, db){
+{ useNewUrlParser: true, useUnifiedTopology: true}, function(err, db){
     if(err){
         throw err;
     }
@@ -37,9 +37,14 @@ mongo.connect('mongodb://root:%40%40Lu17101995@localhost/admin',
 
     client.on('connection', function(socket) {
 
-        console.log("connection socket こんにちは");
+        console.log("connection socket");
         let players = SlimeDB.collection('players');
+        let commonItems = SlimeDB.collection('commonItems');
+        let holidayItems = SlimeDB.collection('holidayItems');
+        let backgrounds = SlimeDB.collection('backgrounds');
+        let slimeColors = SlimeDB.collection('slimeColors');
         let transactions = SlimeDB.collection('transactions');
+        let noItems = SlimeDB.collection('noItems');
 
         
         sendStatus = function(s){
@@ -63,11 +68,11 @@ mongo.connect('mongodb://root:%40%40Lu17101995@localhost/admin',
         });
 
         socket.on('pingado',function(data){
-            pingado.pingado(data, players, socket);
+            pingado.pingado(data, players, noItems, commonItems, holidayItems, backgrounds, slimeColors, socket);
         });
 
         socket.on('screenPressed', function(data){
-            screenPressed.screenPressed(data, players, socket);
+            screenPressed.screenPressed(data, players, noItems, commonItems, holidayItems, backgrounds, slimeColors, socket);
         });
 
         socket.on('topLevel', function(data){
@@ -75,7 +80,7 @@ mongo.connect('mongodb://root:%40%40Lu17101995@localhost/admin',
         });
 
         socket.on('buyItem', function(data){
-            buyItem.buyItem(data, players, socket);
+            buyItem.buyItem(data, players, noItems, commonItems, holidayItems, backgrounds, slimeColors, socket);
         });
 
         socket.on('equipItem', function(data){

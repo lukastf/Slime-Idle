@@ -3,10 +3,11 @@ package com.slimeIdle.Model;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.BitmapFontCache;
 import com.badlogic.gdx.graphics.g2d.PixmapPacker;
-import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
+import com.badlogic.gdx.utils.ArrayMap;
+import com.slimeIdle.Controller.Loader;
+
 import java.awt.FontFormatException;
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -25,20 +26,45 @@ public class Font {
     /** Arabic Glyph List. */
     //public String GLYPHS_AR = "،؍؎؏؟٭۝ ۞۩﴾﴿أ‎أ‎ـأ‎ب‎ﺏ‎ـب‎ـبـ‎بـ‎ت‎ﺕ‎ـت‎ـتـ‎تـ‎ث‎ﺙ‎ـث‎ـثـ‎ثـ‎ج‎ﺝ‎ـج‎ـجـ‎جـ‎ح‎ﺡ‎ـح‎ـحـ‎حـ‎خ‎ﺥ‎ـخ‎ـخـ‎خـ‎د‎ﺩ‎ـد‎ذ‎ﺫ‎ـذ‎ر‎ﺭ‎ـر‎ز‎ﺯ‎ـز‎س‎ﺱ‎ـس‎ـسـ‎سـ‎ش‎ﺵ‎ـش‎ـشـ‎شـ‎ص‎ﺹ‎ـص‎ـصـ‎صـ‎ض‎ﺽ‎ـض‎ـضـ‎ضـ‎ط‎ﻁ‎ـط‎ـطـ‎طـ‎ظ‎ﻅ‎ـظ‎ـظـ‎ظـ‎ع‎ﻉ‎ـع‎ـعـ‎عـ‎غ‎ﻍ‎ـغ‎ـغـ‎غـ‎ف‎ف‎ـف‎ـفـ‎فـ‎ق‎ﻕ‎ـق‎ـقـ‎قـ‎ك‎ﻙ‎ـك‎ـكـ‎كـ‎ل‎ﻝ‎ـل‎ـلـ‎لـ‎م‎ﻡ‎ـم‎ـمـ‎مـ‎ن‎ن‎ـن‎ـنـ‎نـ‎ﻫ‎ﻩ‎ـه‎ـهـ‎هـ‎و‎ﻭ‎ـو‎ي‎ﻱ‎ـي‎ـيـ‎يـ‎آ‎ﺁ‎ـآ‎ة‎ﺓ‎ـة‎—ى‎ﻯ‎ـى‎";
 
-    public String language = "default";
+    //public static String language = "default";
 
-    public boolean fontCache = false;
+    //public boolean fontCacheBoolean = false;
+
+    public ArrayMap<String, Boolean> fontCacheBoolean = new ArrayMap<String, Boolean>();
 
     public int pageWidth = 512;
     public int pageHeight = 512;
+    public boolean loaded = false;
+    public boolean penis = true;
 
-    //public String glyps = this.oi();
+    public void initializer(Loader loader) {
+
+        loader.getFonts(0);
+
+        if(!fontRussia.isEmpty()) {
+            loader.cacheAllFonts(fontRussiaCache,fontRussia);
+        }
+
+        if(!fontJapan.isEmpty()) {
+            loader.cacheAllFonts(fontJapanCache,fontJapan);
+        }
+
+        if(!fontKorea.isEmpty()) {
+            loader.cacheAllFonts(fontKoreaCache,fontKorea);
+        }
+
+        if(!fontChina.isEmpty()) {
+            loader.cacheAllFonts(fontChinaCache,fontChina);
+        }
+    }
+
+    //public String glypsLatin = this.oi();
 
     // 13008 da merda
 
-    //public String glyps = DEFAULT_GLYPHS + GLYPHS_JA + GLYPHS_KO;
+    //public String glypsLatin = DEFAULT_GLYPHS + GLYPHS_JA + GLYPHS_KO;
 
-    public String glyps =
+    public String glypsLatin =
             /* latin */ this.getGlyphs(33,128)
             + /* latin 2*/ this.getGlyphs(161,256);
             //+ /*greek*/ this.getGlyphs(880,1024)
@@ -68,6 +94,9 @@ public class Font {
 
     //public String oi = this.getGlyphs(19800,50000);
 
+    public String glyphsRussia =
+            /*russian 1*/ this.getGlyphs(1024,1328);
+
     public String glypsJapan =
             /*japanese*/ this.getGlyphs(12353,12544)
             + /*japanese 2*/ this.getGlyphs(12688,12704)
@@ -82,17 +111,24 @@ public class Font {
             /*chinese*/ this.getGlyphs(11904,12020)
             + /*chinese 1-2*/ this.getGlyphs(12032,12246)
             + /*chinese 2*/ this.getGlyphs(12736,12771)
-            + /*chinese 3*/ this.getGlyphs(13312,16384);
-            //+ /*chinese 4*/ this.getGlyphs(16384,19894);
-            //+ /*chinese 5*/ this.getGlyphs(19968,20480)
-            //+ /*chinese 6*/ this.getGlyphs(20480,24576)
-            //+ /*chinese 7*/ this.getGlyphs(24576,28672)
-            //+ /*chinese 8*/ this.getGlyphs(28672,32768);
+            + /*chinese 3*/ this.getGlyphs(13312,16384)
+            + /*chinese 4*/ this.getGlyphs(16384,19894)
+            + /*chinese 5*/ this.getGlyphs(19968,20480)
+            + /*chinese 6*/ this.getGlyphs(20480,24576)
+            + /*chinese 7*/ this.getGlyphs(24576,28672)
+            + /*chinese 8*/ this.getGlyphs(28672,32434)
+            + /*chinese 9*/ this.getGlyphs(32436,32768);
 
-    //public String glypsArabia = this.getGlyphs(150001,200000);
+    //public String glypsArabia = this.getGlyphs(150001,200000); 32435
+
+    //+ /*chinese 8*/ this.getGlyphs(28672,32768); -- suave
+
+    //String oi = this.velho(1000, 2000);
 
     public Map<String, BitmapFont> fontDefault = new HashMap<String, BitmapFont>();
     public Map<String, BitmapFontCache> fontDefaultCache = new HashMap<String, BitmapFontCache>();
+    public Map<String, BitmapFont> fontRussia = new HashMap<String, BitmapFont>();
+    public Map<String, BitmapFontCache> fontRussiaCache = new HashMap<String, BitmapFontCache>();
     public Map<String, BitmapFont> fontJapan = new HashMap<String, BitmapFont>();
     public Map<String, BitmapFontCache> fontJapanCache = new HashMap<String, BitmapFontCache>();
     public Map<String, BitmapFont> fontKorea = new HashMap<String, BitmapFont>();
@@ -101,91 +137,10 @@ public class Font {
     public Map<String, BitmapFontCache> fontChinaCache = new HashMap<String, BitmapFontCache>();
 
     public Map<String, PixmapPacker> pixPackersDefault = new HashMap<String, PixmapPacker>();
+    public Map<String, PixmapPacker> pixPackersRussia = new HashMap<String, PixmapPacker>();
     public Map<String, PixmapPacker> pixPackersJapan = new HashMap<String, PixmapPacker>();
     public Map<String, PixmapPacker> pixPackersKorea = new HashMap<String, PixmapPacker>();
-
-    // Fonts
-    //public BitmapFont fontDEFAULT;
-    //public BitmapFontCache fontDEFAULTcache;
-    /*public BitmapFont fontJAPAN;
-    public BitmapFont fontKOREA;
-    public BitmapFont fontCHINA;
-    public BitmapFont fontARABIA;
-
-    //public BitmapFont fontTopLevelDEFAULT;
-    //public BitmapFontCache fontTopLevelDEFAULTcache;
-    public BitmapFont fontTopLevelJAPAN;
-    public BitmapFont fontTopLevelKOREA;
-    public BitmapFont fontTopLevelCHINA;
-    public BitmapFont fontTopLevelARABIA;
-
-    //public BitmapFont fontTopLevelNumberDEFAULT;
-   //public BitmapFontCache fontTopLevelNumberDEFAULTcache;
-    public BitmapFont fontTopLevelNumberJAPAN;
-    public BitmapFont fontTopLevelNumberKOREA;
-    public BitmapFont fontTopLevelNumberCHINA;
-    public BitmapFont fontTopLevelNumberARABIA;
-
-    //public BitmapFont fontPlayerSelecionadoLevelDEFAULT;
-    //public BitmapFontCache fontPlayerSelecionadoLevelDEFAULTcache;
-    public BitmapFont fontPlayerSelecionadoLevelJAPAN;
-    public BitmapFont fontPlayerSelecionadoLevelKOREA;
-    public BitmapFont fontPlayerSelecionadoLevelCHINA;
-    public BitmapFont fontPlayerSelecionadoLevelARABIA;
-
-    //public BitmapFont fontSuccessDEFAULT;
-    //public BitmapFontCache fontSuccessDEFAULTcache;
-    public BitmapFont fontSuccessJAPAN;
-    public BitmapFont fontSuccessKOREA;
-    public BitmapFont fontSuccessCHINA;
-    public BitmapFont fontSuccessARABIA;
-
-    //public BitmapFont fontErrorDEFAULT;
-    //public BitmapFontCache fontErrorDEFAULTcache;
-    public BitmapFont fontErrorJAPAN;
-    public BitmapFont fontErrorKOREA;
-    public BitmapFont fontErrorCHINA;
-    public BitmapFont fontErrorARABIA;
-
-    //public BitmapFont fontTitleDEFAULT;
-    //public BitmapFontCache fontTitleDEFAULTcache;
-    public BitmapFont fontTitleJAPAN;
-    public BitmapFont fontTitleKOREA;
-    public BitmapFont fontTitleCHINA;
-    public BitmapFont fontTitleARABIA;
-
-    public FreeTypeFontGenerator generatorDEFAULT;
-    public FreeTypeFontGenerator generatorJAPAN;
-    public FreeTypeFontGenerator generatorKOREA;
-    public FreeTypeFontGenerator generatorCHINA;
-    public FreeTypeFontGenerator generatorARABIA;*/
-
-    public String oi () {
-
-        String glyps = "";
-
-        try {
-            //GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
-            //ge.registerFont(java.awt.Font.createFont(java.awt.Font.TRUETYPE_FONT, new File("A.ttf")));
-
-            final java.awt.Font f = java.awt.Font.createFont(java.awt.Font.TRUETYPE_FONT, this.getClass().getClassLoader().getResourceAsStream("android/assets/fonts/default/fontDEFAULT.ttf"));
-
-            for (char c = 0x0000; c <= 0xFFFF; c++) {
-                if (f.canDisplay(c)) {
-                    System.out.println( c );
-                    glyps += " " + c;
-                }
-            }
-
-
-        } catch (IOException e) {
-            System.out.println( e );
-        } catch (FontFormatException e) {
-            System.out.println( e );
-        }
-
-        return glyps;
-    }
+    public Map<String, PixmapPacker> pixPackersChina = new HashMap<String, PixmapPacker>();
 
     public String getGlyphs (int ini, int fim) {
 
@@ -193,97 +148,17 @@ public class Font {
         //System.out.println( ini );
 
         for( int i = ini; i < fim; i++ ){
-            //Character c = (char)i;
-            //System.out.println((char)13008);
-                    //if (c.equals('�')) continue;
-            //if(Character.isDefined((char)i)) {
-                //System.out.println( "Pos:" + i + "Char: " + (char)i);
-            //System.out.println( "\\u" + Integer.toHexString((char)i | 0x10000).substring(1) );
-            //System.out.println((char)i);
-                glyps += (char)i;
-                //glyps += " \\u" + Integer.toHexString((char)i | 0x10000).substring(1);
-            //}
+
+            glyps += (char)i;
         }
-        //System.out.println("oi: "+glyps);
 
-        //String texto1 = "abc";
-
-
-        /*
-            System.out.println( "Char: " + Integer.toHexString( i )
-                    + " ==> " + (char)i );
-         */
-
-
-        /*
-        for (int i=0; i<=200000; i++) {
-            if (Character.isDefined(i)) {
-               // System.out.println(Integer.toHexString(i)+": "+ new String(Character.toChars(i)));
-                //Integer.toString(i);
-                glyps += new String(Character.toChars(i));
-            }
-        }
-        /
-         */
-        //System.out.println("lol: "+glyps);
         return glyps;
     }
 
-
     public void dispose () {
 
-        /*
-        generatorDEFAULT.dispose();
-        generatorJAPAN.dispose();
-        generatorKOREA.dispose();
-        generatorCHINA.dispose();
-        generatorARABIA.dispose();
-         */
-
-        //fontDEFAULT.dispose();
         fontDefault.clear();
         fontDefaultCache.clear();
-        /*
-        fontJAPAN.dispose();
-        fontKOREA.dispose();
-        fontCHINA.dispose();
-        fontARABIA.dispose();
-
-        //fontTopLevelDEFAULT.dispose();
-        fontTopLevelJAPAN.dispose();
-        fontTopLevelKOREA.dispose();
-        fontTopLevelCHINA.dispose();
-        fontTopLevelARABIA.dispose();
-
-        //fontTopLevelNumberDEFAULT.dispose();
-        fontTopLevelNumberJAPAN.dispose();
-        fontTopLevelNumberKOREA.dispose();
-        fontTopLevelNumberCHINA.dispose();
-        fontTopLevelNumberARABIA.dispose();
-
-        //fontPlayerSelecionadoLevelDEFAULT.dispose();
-        fontPlayerSelecionadoLevelJAPAN.dispose();
-        fontPlayerSelecionadoLevelKOREA.dispose();
-        fontPlayerSelecionadoLevelCHINA.dispose();
-        fontPlayerSelecionadoLevelARABIA.dispose();
-
-        //fontSuccessDEFAULT.dispose();
-        fontSuccessJAPAN.dispose();
-        fontSuccessKOREA.dispose();
-        fontSuccessCHINA.dispose();
-        fontSuccessARABIA.dispose();
-
-        //fontErrorDEFAULT.dispose();
-        fontErrorJAPAN.dispose();
-        fontErrorKOREA.dispose();
-        fontErrorCHINA.dispose();
-        fontErrorARABIA.dispose();
-
-        //fontTitleDEFAULT.dispose();
-        fontTitleJAPAN.dispose();
-        fontTitleKOREA.dispose();
-        fontTitleCHINA.dispose();
-        fontTitleARABIA.dispose();*/
 
     }
 }

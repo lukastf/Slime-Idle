@@ -1,21 +1,14 @@
 package com.slimeIdle.Model;
 
-import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.Sprite;
-
 import org.json.JSONException;
 import org.json.JSONObject;
-
 import io.socket.client.Socket;
 
 public class Coin {
 
     private int coins = 0;
 
-    // Textures
-    public Texture coin;
-
-    public float freeCoinPosition = 5;
+    public float freeCoinPosition = 0f;
     public boolean freeCoin = false;
 
     public int getCoins() {
@@ -25,9 +18,9 @@ public class Coin {
         this.coins = coins;
     }
 
-    public void dispose() {
-        coin.dispose();
-    }
+    //public void dispose() {
+        //coin.dispose();
+    //}
 
     public void buyCoins(Account acc, String transactionId, Socket socket){
         JSONObject enviar = new JSONObject();

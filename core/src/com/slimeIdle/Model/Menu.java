@@ -1,22 +1,31 @@
 package com.slimeIdle.Model;
 
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
 public class Menu {
 
     // Textures
-    public Texture background_menu;
-    public  Texture itemMenu;
+    public TextureRegion background_menu;
+    //public  TextureRegion btnMenu;
 
     private boolean menu = false;
+
+    private boolean menu_language = false;
+    private boolean menu_background = false;
+    private boolean menu_slime_color = false;
+
     private boolean menu_cart = false;
     private boolean menu_coin = false;
     private boolean menu_topLevel = false;
     private boolean menu_topLevel_PlayerSelecionado = false;
     private boolean menu_item_selecionado = false;
+
     private boolean menu_item_BuySuccess = false;
     private boolean menu_item_BuyError_money = false;
     private boolean menu_item_BuyError_ready = false;
+
+    private boolean menu_logout = false;
 
     private int menu_currentPage = 1;
 
@@ -91,7 +100,39 @@ public class Menu {
     }
 
     public void dispose () {
-        background_menu.dispose();
-        itemMenu.dispose();
+        //background_menu.dispose();
+        //itemMenu.dispose();
+    }
+
+    public boolean isMenu_language() {
+        return menu_language;
+    }
+
+    public void setMenu_language(boolean menu_language) {
+        this.menu_language = menu_language;
+    }
+
+    public boolean isMenu_background() {
+        return menu_background;
+    }
+
+    public void setMenu_background(boolean menu_background) {
+        this.menu_background = menu_background;
+    }
+
+    public boolean isMenu_slime_color() {
+        return menu_slime_color;
+    }
+
+    public void setMenu_slime_color(boolean menu_slime_color) {
+        this.menu_slime_color = menu_slime_color;
+    }
+
+    public boolean isMenu_logout() {
+        return menu_logout;
+    }
+
+    public void setMenu_logout(boolean menu_logout) {
+        this.menu_logout = menu_logout;
     }
 }

@@ -1,6 +1,6 @@
 android {
     buildToolsVersion '28.0.3'
-    compileSdkVersion 27
+    compileSdkVersion 28
     sourceSets {
         main {
             manifest.srcFile 'AndroidManifest.xml'
@@ -19,9 +19,9 @@ android {
     defaultConfig {
         applicationId "com.slimeIdle"
         minSdkVersion 19
-        targetSdkVersion 27
-        versionCode 5
-        versionName "1.15"
+        targetSdkVersion 28
+        versionCode 7
+        versionName "1.16"
     }
     buildTypes {
         release {

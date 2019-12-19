@@ -27,6 +27,9 @@ leave: Ctrl+b and d
 tmux attach-session -t mongod
 tmux attach-session -t server
 
+tmux list-sessions
+tmux kill-session -t targetSession
+
 ssh into the remote machine
 start tmux by typing tmux into the shell
 start the process you want inside the started tmux session

@@ -28,11 +28,5 @@ public class AndroidLauncher extends AndroidApplication {
 		slime.purchaseManager.pmc.addOffer(new Offer().setType(OfferType.CONSUMABLE).setIdentifier("4"));
 		slime.purchaseManager.pmc.addOffer(new Offer().setType(OfferType.CONSUMABLE).setIdentifier("5"));
 		initialize(slime, config);
-
-		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-			if (this.checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-				this.requestPermissions(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 1);
-			}
-		}
 	}
 }

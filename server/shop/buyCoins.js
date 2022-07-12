@@ -1,15 +1,17 @@
 myCrypto = require('../myCrypto').myCrypto;
 db = require('../db').db;
 
-exports.buyCoins = function(data, players, socket, transactions){
+const buyCoins = (data, players, socket, transactions) => {
 
-    if(data.fbId1 != null && data.fbId2 != null){
+    /*if(data.fbId1 != null && data.fbId2 != null){
         data.fbId = myCrypto.decrypt2Pieces(data.fbId1, data.fbId2);
     } else {
         return true;
-    }
+    }*/
 
-    players.findOne({fbId:data.fbId}, function(err, res){
+    data._id = myCrypto.decryptId(data._id);
+
+    players.findOne({_id:data._id}, (err, res) => {
         if(err){
             throw err;
         }
@@ -49,3 +51,5 @@ exports.buyCoins = function(data, players, socket, transactions){
 
     });
 };
+
+module.exports = buyCoins;

@@ -4,10 +4,9 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.BitmapFontCache;
 import com.badlogic.gdx.graphics.g2d.PixmapPacker;
 import com.badlogic.gdx.utils.ArrayMap;
-import com.slimeIdle.Controller.Loader;
+import com.slimeIdle.Controller.loader.Fonts;
+import com.slimeIdle.Controller.loader.Loader;
 
-import java.awt.FontFormatException;
-import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -34,10 +33,10 @@ public class Font {
 
     public int pageWidth = 512;
     public int pageHeight = 512;
-    public boolean loaded = false;
-    public boolean penis = true;
+    //public boolean loaded = false;
+    //public boolean penis = true;
 
-    public void initializer(Loader loader) {
+    public void initializer(Fonts loader) {
 
         loader.getFonts(0);
 

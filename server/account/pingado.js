@@ -1,15 +1,18 @@
 myCrypto = require('../myCrypto').myCrypto;
 converter = require('../converters').converters;
 
-exports.pingado = function(data, players, noItems, commonItems, holidayItems, backgrounds, slimeColors, socket){
+const pingado = (data, players, noItems, commonItems, holidayItems, backgrounds, slimeColors, socket) => {
 
+    /*
     if(data.fbId1 != null && data.fbId2 != null){
         data.fbId = myCrypto.decrypt2Pieces(data.fbId1, data.fbId2);
     } else {
         return true;
-    }
+    }*/
 
-    players.findOne({fbId:data.fbId}, function(err, res){
+    data._id = myCrypto.decryptId(data._id);
+
+    players.findOne({_id:data._id}, (err, res) => {
         if(err)throw err;
         if(res == null) return true;
 
@@ -32,61 +35,62 @@ exports.pingado = function(data, players, noItems, commonItems, holidayItems, ba
 
         //shop prices
 
-        noItems.find({}, {"price":1}).sort({ id: 1 }).limit(4).toArray(function(err, noItemsPrices) {
+        noItems.find({}, {"price":1}).sort({ id: 1 }).limit(4).toArray((err, noItemsPrices) => {
             if(err) throw err;
             if(res == null) return true;
 
             res.noItemsPrices = [];
 
-            noItemsPrices.forEach(function(element) {
+            noItemsPrices.forEach((element) => {
 
                 if (element.price != undefined) res.noItemsPrices.push(element.price);
                 if (element.basePrice != undefined) res.noItemsPrices.push(element.basePrice);
                 
             });
 
-            holidayItems.find({}, {"price":1}).sort({ id: 1 }).limit(1).toArray(function(err, holidayItemsPrices) {
+            holidayItems.find({}, {"price":1}).sort({ id: 1 }).limit(1).toArray((err, holidayItemsPrices) => {
                 if(err) throw err;
                 if(res == null) return true;
 
                 res.holidayItemsPrices = [];
 
-                holidayItemsPrices.forEach(function(element) {
+                holidayItemsPrices.forEach((element) => {
                     res.holidayItemsPrices.push(element.price);
                 });
 
-                commonItems.find({}, {"price":1}).sort({ id: 1 }).limit(20).toArray(function(err, commonItemsPrices) {
+                commonItems.find({}, {"price":1}).sort({ id: 1 }).limit(20).toArray((err, commonItemsPrices) => {
                     if(err) throw err;
                     if(res == null) return true;
 
                     res.commonItemsPrices = [];
 
-                    commonItemsPrices.forEach(function(element) {
+                    commonItemsPrices.forEach((element) => {
                         res.commonItemsPrices.push(element.price);
                     });
 
-                    backgrounds.find({}, {"price":1}).sort({ id: 1 }).limit(5).toArray(function(err, backgroundsPrices){
+                    backgrounds.find({}, {"price":1}).sort({ id: 1 }).limit(5).toArray((err, backgroundsPrices) => {
                         if(err) throw err;
                         if(res == null) return true;
 
                         res.backgroundsPrices = [];
 
-                        backgroundsPrices.forEach(function(element) {
+                        backgroundsPrices.forEach((element) => {
                             res.backgroundsPrices.push(element.price);
                         });
 
-                        slimeColors.find({}, {"price":1}).sort({ id: 1 }).limit(9).toArray(function(err, slimeColorsPrices){
+                        slimeColors.find({}, {"price":1}).sort({ id: 1 }).limit(9).toArray((err, slimeColorsPrices) => {
                             if(err) throw err;
                             if(res == null) return true;
             
                             res.slimeColorsPrices = [];
 
-                            slimeColorsPrices.forEach(function(element) {
+                            slimeColorsPrices.forEach((element) => {
                                 res.slimeColorsPrices.push(element.price);
                             });
 
                             //console.log(res);
-                            res.fbId = myCrypto.encrypt(res.fbId).toString();
+                            //res.fbId = myCrypto.encrypt(res.fbId).toString();
+                            res._id = myCrypto.encryptId(res._id);
                             socket.emit('output', res);
                         });
                     });
@@ -100,3 +104,5 @@ exports.pingado = function(data, players, noItems, commonItems, holidayItems, ba
         //socket.emit('output', res);
     });
 };
+
+module.exports = pingado;

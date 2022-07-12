@@ -9,6 +9,7 @@ const client = require('socket.io')(8091, {pingInterval: 1000}).sockets;
 // account
 const createAccount = require('./account/createAccount');
 const setNickname = require('./account/setNickname');
+const setPassword = require('./account/setPassword');
 const login = require('./account/login');
 const checkAccount = require('./account/checkAccount');
 const pingado = require('./account/pingado');
@@ -22,8 +23,8 @@ const unequipItem = require('./shop/unequipItem');
 const buyCoins = require('./shop/buyCoins');
 
 // Connect to mongo
-mongo.connect('mongodb://root:%40%40Lu17101995@localhost/admin',
-{ useNewUrlParser: true, useUnifiedTopology: true}, function(err, db){
+mongo.connect('mongodb://root:password@localhost/admin',
+{ useNewUrlParser: true, useUnifiedTopology: true}, (err, db) => {
     if(err){
         throw err;
     }
@@ -35,7 +36,7 @@ mongo.connect('mongodb://root:%40%40Lu17101995@localhost/admin',
 
     console.log("mongo connected");
 
-    client.on('connection', function(socket) {
+    client.on('connection', async (socket) => {
 
         console.log("connection socket");
         let players = SlimeDB.collection('players');
@@ -47,55 +48,59 @@ mongo.connect('mongodb://root:%40%40Lu17101995@localhost/admin',
         let noItems = SlimeDB.collection('noItems');
 
         
-        sendStatus = function(s){
+        sendStatus = async (s) => {
             socket.emit('status', s);
         }
 
-        socket.on('createAccount',function(data){
-            createAccount.createAccount(data, players, socket);
+        socket.on('createAccount', async (data) => {
+            createAccount(data, players, socket);
         });
 
-        socket.on('setNickname',function(data){
-            setNickname.setNickname(data, players, socket);
+        socket.on('setNickname', async (data) => {
+            setNickname(data, players, socket);
         });
 
-        socket.on('login',function(data){
-            login.login(data, players, socket);
+        socket.on('setPassword',async (data) => {
+            setPassword(data, players, socket);
         });
 
-        socket.on('checkAccount',function(data){
-            checkAccount.checkAccount(data, players, socket);
+        socket.on('login', async (data) => {
+            login(data, players, socket);
         });
 
-        socket.on('pingado',function(data){
-            pingado.pingado(data, players, noItems, commonItems, holidayItems, backgrounds, slimeColors, socket);
+        socket.on('checkAccount', async (data) => {
+            checkAccount(data, players, socket);
         });
 
-        socket.on('screenPressed', function(data){
-            screenPressed.screenPressed(data, players, noItems, commonItems, holidayItems, backgrounds, slimeColors, socket);
+        socket.on('pingado', async (data) => {
+            pingado(data, players, noItems, commonItems, holidayItems, backgrounds, slimeColors, socket);
         });
 
-        socket.on('topLevel', function(data){
-            topLevel.topLevel(data, players, socket);
+        socket.on('screenPressed', async (data) => {
+            screenPressed(data, players, noItems, commonItems, holidayItems, backgrounds, slimeColors, socket);
         });
 
-        socket.on('buyItem', function(data){
-            buyItem.buyItem(data, players, noItems, commonItems, holidayItems, backgrounds, slimeColors, socket);
+        socket.on('topLevel', async (data) => {
+            topLevel(data, players, socket);
         });
 
-        socket.on('equipItem', function(data){
-            equipItem.equipItem(data, players, socket);
+        socket.on('buyItem', async (data) => {
+            buyItem(data, players, noItems, commonItems, holidayItems, backgrounds, slimeColors, socket);
         });
 
-        socket.on('unequipItem', function(data){
-            unequipItem.unequipItem(data, players, socket);
+        socket.on('equipItem', async (data) => {
+            equipItem(data, players, socket);
         });
 
-        socket.on('buyCoins', function(data){
-            buyCoins.buyCoins(data, players, socket, transactions);
+        socket.on('unequipItem', async (data) => {
+            unequipItem(data, players, socket);
         });
 
-        socket.on('disconnect', function(){
+        socket.on('buyCoins', async (data) => {
+            buyCoins(data, players, socket, transactions);
+        });
+
+        socket.on('disconnect', async() => {
             console.log("disconnection");
         });
     });

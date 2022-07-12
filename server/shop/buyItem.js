@@ -1,17 +1,71 @@
 myCrypto = require('../myCrypto').myCrypto;
 db = require('../db').db;
 
-exports.buyItem = function(data, players, noItems, commonItems, holidayItems, backgrounds, slimeColors, socket){
+const buyItemF = (res, data, players, itemId,itemShop,type, socket) => {
 
-    if(data.fbId1 != null && data.fbId2 != null){
-        data.fbId = myCrypto.decrypt2Pieces(data.fbId1, data.fbId2);
-    } else {
-        return true;
+    switch(type) {
+
+        // holiday items
+        case 0:
+            if(res.items.holiday.includes(itemId)) {
+                return true;
+            }
+            break;
+        // common items
+        case 1:
+            if(res.items.common.includes(itemId)){
+                return true;
+            }
+            break;
+        // backgrounds
+        case 2:
+            if(res.backgrounds.includes(itemId)) {
+                return true;
+            }
+            break;
+        // colors
+        case 3:
+            if(res.slimeColors.includes(itemId)) {
+                return true;
+            }
+            break;
     }
 
-    //data.itemId é o id do client
+    if(res.coins >= itemShop.price) {
+        res.coins = res.coins - itemShop.price;
+        //itemBought.bought = true;
 
-    players.findOne({fbId:data.fbId}, function(err, res){
+        switch(type) {
+            case 0:
+                res.items.holiday.push(itemId);
+                break;
+            case 1:
+                res.items.common.push(itemId);
+                break;
+            case 2:
+                res.backgrounds.push(itemId);
+                break;
+            case 3:
+                res.slimeColors.push(itemId);
+                break;
+        }
+
+        
+        db.updateMongo(players,data,res);
+        //res.fbId = myCrypto.encrypt(res.fbId).toString();
+        res._id = myCrypto.encryptId(res._id);
+        socket.emit('buySuccessful', res);
+        
+    } else {
+        socket.emit('buyErrorMoney');
+    }
+};
+
+const buyItem = (data, players, noItems, commonItems, holidayItems, backgrounds, slimeColors, socket) => {
+
+    data._id = myCrypto.decryptId(data._id);
+
+    players.findOne({_id:data._id}, (err, res) => {
         if(err){
             throw err;
         }
@@ -23,81 +77,11 @@ exports.buyItem = function(data, players, noItems, commonItems, holidayItems, ba
         let currentDate = new Date().getTime();
         let readyDate = 0;
 
-        //if(res.level > 1440){
-            //readyDate = res.lastTimeTouch + (1440 * 60000);
-        //} else {
-            readyDate = res.lastTimeTouch + (res.level * 60000);
-        //}
-
-
-        function buyItem(itemId,itemShop,type) {
-
-            //if(data.itemId == itemId) {
-
-                /*if(itemBought.bought) {
-                    return true;
-                } */
-
-                switch(type) {
-
-                    // holiday items
-                    case 0:
-                        if(res.items.holiday.includes(itemId)) {
-                            return true;
-                        }
-                        break;
-                    // common items
-                    case 1:
-                        if(res.items.common.includes(itemId)){
-                            return true;
-                        }
-                        break;
-                    // backgrounds
-                    case 2:
-                        if(res.backgrounds.includes(itemId)) {
-                            return true;
-                        }
-                        break;
-                    // colors
-                    case 3:
-                        if(res.slimeColors.includes(itemId)) {
-                            return true;
-                        }
-                        break;
-                }
-
-                if(res.coins >= itemShop.price) {
-                    res.coins = res.coins - itemShop.price;
-                    //itemBought.bought = true;
-
-                    switch(type) {
-                        case 0:
-                            res.items.holiday.push(itemId);
-                            break;
-                        case 1:
-                            res.items.common.push(itemId);
-                            break;
-                        case 2:
-                            res.backgrounds.push(itemId);
-                            break;
-                        case 3:
-                            res.slimeColors.push(itemId);
-                            break;
-                    }
-
-                    
-                    db.updateMongo(players,data,res);
-                    res.fbId = myCrypto.encrypt(res.fbId).toString();
-                    socket.emit('buySuccessful', res);
-                } else {
-                    socket.emit('buyErrorMoney');
-                }
-            //}
-        }
+        readyDate = res.lastTimeTouch + (res.level * 60000);
 
         if (data.collection == "noItems") {
 
-            noItems.find({}).sort({ id: 1 }).limit(4).toArray(function(err, noItemsRes){
+            noItems.find({}).sort({ id: 1 }).limit(4).toArray((err, noItemsRes) => {
                 
                 // time reset
                 if(data.itemId == 1) {
@@ -109,7 +93,8 @@ exports.buyItem = function(data, players, noItems, commonItems, holidayItems, ba
                             res.coins = res.coins - noItemsRes[0].price;
                             res.lastTimeTouch = res.lastTimeTouch - readyDate;
                             db.updateMongo(players,data,res);
-                            res.fbId = myCrypto.encrypt(res.fbId).toString();
+                            //res.fbId = myCrypto.encrypt(res.fbId).toString();
+                            res._id = myCrypto.encryptId(res._id);
                             socket.emit('buySuccessful', res);
                             
                         } else {
@@ -128,7 +113,8 @@ exports.buyItem = function(data, players, noItems, commonItems, holidayItems, ba
                             res.coins = res.coins - noItemsRes[1].price;
                             res.nickname = "";
                             db.updateMongo(players,data,res);
-                            res.fbId = myCrypto.encrypt(res.fbId).toString();
+                            //res.fbId = myCrypto.encrypt(res.fbId).toString();
+                            res._id = myCrypto.encryptId(res._id);
                             socket.emit('buySuccessful', res);
                             
                         } else {
@@ -145,7 +131,8 @@ exports.buyItem = function(data, players, noItems, commonItems, holidayItems, ba
                         res.coins = res.coins - (noItemsRes[2].basePrice + res.touchPower);
                         res.touchPower = res.touchPower + 1;
                         db.updateMongo(players,data,res);
-                        res.fbId = myCrypto.encrypt(res.fbId).toString();
+                        //res.fbId = myCrypto.encrypt(res.fbId).toString();
+                        res._id = myCrypto.encryptId(res._id);
                         socket.emit('buySuccessful', res);
 
                     } else {
@@ -159,42 +146,44 @@ exports.buyItem = function(data, players, noItems, commonItems, holidayItems, ba
 
         if (data.collection == "holidayItems") {
 
-            holidayItems.find({}, {"price":1}).sort({ id: 1 }).limit(20).toArray(function(err, res){
+            holidayItems.find({}, {"price":1}).sort({ id: 1 }).limit(20).toArray((err, resp) => {
                 if(err) throw err;
-                if(res == null) return true;
+                if(resp == null) return true;
 
-                buyItem(data.itemId, res[data.itemId-1],0);
+                buyItemF(res, data, players, data.itemId, resp[data.itemId-1],0, socket);
             });
         }
         
         if (data.collection == "commonItems") {
 
-            commonItems.find({}, {"price":1}).sort({ id: 1 }).limit(20).toArray(function(err, res){
+            commonItems.find({}, {"price":1}).sort({ id: 1 }).limit(20).toArray((err, resp) => {
                 if(err) throw err;
-                if(res == null) return true;
+                if(resp == null) return true;
 
-                buyItem(data.itemId, res[data.itemId-1],1);
+                buyItemF(res, data, players, data.itemId, resp[data.itemId-1],1, socket);
             });
         }
 
        if (data.collection == "backgrounds") {
 
-            backgrounds.find({}, {"price":1}).sort({ id: 1 }).limit(5).toArray(function(err, res){
+            backgrounds.find({}, {"price":1}).sort({ id: 1 }).limit(5).toArray((err, resp) => {
                 if(err) throw err;
-                if(res == null) return true;
+                if(resp == null) return true;
 
-                buyItem(data.itemId, res[data.itemId-1],2);
+                buyItemF(res, data, players, data.itemId, resp[data.itemId-1],2, socket);
             });
         }
 
         if (data.collection == "slimeColors") {
 
-            slimeColors.find({}, {"price":1}).sort({ id: 1 }).limit(9).toArray(function(err, res){
+            slimeColors.find({}, {"price":1}).sort({ id: 1 }).limit(9).toArray((err, resp) => {
                 if(err) throw err;
-                if(res == null) return true;
+                if(resp == null) return true;
 
-                buyItem(data.itemId, res[data.itemId-1],3);
+                buyItemF(res, data, players, data.itemId, resp[data.itemId-1],3, socket);
             });
         }
     });
 };
+
+module.exports = buyItem;

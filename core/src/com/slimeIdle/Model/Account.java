@@ -14,10 +14,10 @@ import io.socket.emitter.Emitter;
 
 public class Account {
 
-    public String[] id = {"",""};
+    public String[] fbIdArray = {"",""};
     public String[] pass = {"",""};
 
-    //private String nome = "";
+    private String id = "";
     private String fbId = "";
     private String nickname = "";
     private String password = "";
@@ -81,6 +81,14 @@ public class Account {
     //public void setNome(String nome) {
         //this.nome = nome;
     //}
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
 
     public String getFbId() {
         return fbId;
@@ -180,8 +188,9 @@ public class Account {
         setFbId("");
         setNickname("");
         setPassword("");
-        id[0] = "";
-        id[1] = "";
+        //id[0] = "";
+        //id[1] = "";
+        id = "";
 
         pass[0] = "";
         pass[1]= "";
@@ -247,8 +256,13 @@ public class Account {
         try {
             //enviar.put("name", getNome());
             if(getFbId() != ""){
-                enviar.put("fbId1", id[0]);
-                enviar.put("fbId2", id[1]);
+
+                System.out.println("ejtrol");
+                System.out.println("cu " + fbIdArray[0]);
+
+                enviar.put("fbId1", fbIdArray[0]);
+                enviar.put("fbId2", fbIdArray[1]);
+                //enviar.put("_id", id);
             }
 
             if(getPassword() != "" && getNickname() != "" && getNickname() != ">Insert Nickname<"){
@@ -280,8 +294,9 @@ public class Account {
         JSONObject enviar = new JSONObject();
         try {
             //enviar.put("name", getNome());
-            enviar.put("fbId1", id[0]);
-            enviar.put("fbId2", id[1]);
+            //enviar.put("fbId1", id[0]);
+            //enviar.put("fbId2", id[1]);
+            enviar.put("_id", id);
 
             socket.emit("pingado", enviar);
 
@@ -376,13 +391,16 @@ public class Account {
                 JSONObject data = (JSONObject) args[0];
                 try {
                     //setNome(data.getString("name"));
+                    //id = encryption.encryptIn2(encryption.decrypt(data.getString("fbId")));
+                    //System.out.println("pau no seu cu" + data.getString("_id"));
+                    id = data.getString("_id");
                     setFbId(data.getString("fbId"));
-                    id = encryption.encryptIn2(encryption.decrypt(data.getString("fbId")));
                     setNickname(data.getString("nickname"));
                     setPassword(data.getString("password"));
                     pass = encryption.encryptIn2(encryption.decrypt(data.getString("password")));
 
                     //getPrefs().putString("name", getNome());
+                    getPrefs().putString("_id", getId());
                     getPrefs().putString("fbId", getFbId());
                     getPrefs().putString("nickname", getNickname());
                     getPrefs().putString("password", getPassword());
@@ -390,6 +408,7 @@ public class Account {
 
                 } catch (JSONException e){
                     e.printStackTrace();
+                    //System.out.println("baskete");
                 }
 
                 socket.disconnect();
@@ -410,8 +429,9 @@ public class Account {
         JSONObject enviar = new JSONObject();
         try {
             //enviar.put("name", getNome());
-            enviar.put("fbId1", id[0]);
-            enviar.put("fbId2", id[1]);
+            //enviar.put("fbId1", id[0]);
+            //enviar.put("fbId2", id[1]);
+            enviar.put("_id", id);
             enviar.put("nickname", createAccountStrings.get(0));
 
             socket.emit("setNickname", enviar);

@@ -1,7 +1,7 @@
 myCrypto = require('../myCrypto').myCrypto;
 db = require('../db').db;
 
-exports.createAccount = function(data, players, socket){
+const createAccount = (data, players, socket) => {
 
     if(data.password1 != null && data.password2 != null && data.password1 != undefined && data.password2 != undefined){
         data.password = myCrypto.decrypt2Pieces(data.password1, data.password2);
@@ -9,6 +9,7 @@ exports.createAccount = function(data, players, socket){
         return true;
     }
 
+    console.log("miu");
     console.log(data.password);
 
     if(data.nickname.length > 16 
@@ -35,15 +36,15 @@ exports.createAccount = function(data, players, socket){
         return true;
     } else {
 
-        players.findOne({nickname:data.nickname}, function(err, res){
+        players.findOne({nickname:data.nickname}, (err, res) => {
 
             if(err)throw err;
 
             if(res == null) {
                 //if(){
                 //return true;
-                data.fbId = "" + new Date().getTime()+ "";
-                //data.fbId = "";
+                //data.fbId = "" + new Date().getTime()+ "";
+                data.fbId = "";
                 db.insertMongo(players,data);
                 socket.emit('createAccountSuccessful');
                 //} else {
@@ -56,3 +57,5 @@ exports.createAccount = function(data, players, socket){
         });
     }
 };
+
+module.exports = createAccount;

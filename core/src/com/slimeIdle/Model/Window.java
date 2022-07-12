@@ -2,10 +2,12 @@ package com.slimeIdle.Model;
 
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.utils.ArrayMap;
+import com.badlogic.gdx.graphics.Texture;
 
 public class Window {
 
     // Textures
+    public Texture windows;
     public TextureRegion reconnectWindow;
     public TextureRegion window;
 

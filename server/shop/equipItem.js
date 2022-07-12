@@ -1,116 +1,95 @@
 myCrypto = require('../myCrypto').myCrypto;
 db = require('../db').db;
 
-exports.equipItem = function(data, players, socket){
+const equipItemF  = (res, data, players, itemId, item, type, socket) => {
+    //if(data.itemId == itemId){
+    switch (type) {
 
-    if(data.fbId1 != null && data.fbId2 != null){
-        data.fbId = myCrypto.decrypt2Pieces(data.fbId1, data.fbId2);
-    } else {
-        return true;
-    }
+        case 0:
 
-    players.findOne({fbId:data.fbId}, function(err, res){
-        if(err) throw err;
-        if(res == null) return true;
-       
-        function equipItem (itemId,item,type) {
-            //if(data.itemId == itemId){
-            switch (type) {
-
-                case 0:
-
-                    if(itemId == res.itemEquipped) {
-                        return true;
-                    } else {
-                        if(item.includes(itemId)) {
-                            res.itemEquipped = itemId;
-                            res.itemEquippedCollection = data.collection;
-                            db.updateMongo(players,data,res);
-                            res.fbId = myCrypto.encrypt(res.fbId).toString();
-                            socket.emit('equipSuccessful', res);
-                        } else {
-                            socket.emit('equipErrorBought');
-                        }
-                    }
-                break;
-                case 1:
-
-                    if(itemId == res.backgroundEquipped) {
-                        return true;
-                    } else {
-                        if(item.includes(itemId)) {
-                            res.backgroundEquipped = itemId;
-                            db.updateMongo(players,data,res);
-                            res.fbId = myCrypto.encrypt(res.fbId).toString();
-                            socket.emit('equipSuccessful', res);
-                        } else {
-                            socket.emit('equipErrorBought');
-                        }
-                    }
-                break;
-                case 2:
-
-                    if(itemId == res.slimeColorEquipped) {
-                        return true;
-                    } else {
-                        if(item.includes(itemId)) {
-                            res.slimeColorEquipped = itemId;
-                            db.updateMongo(players,data,res);
-                            res.fbId = myCrypto.encrypt(res.fbId).toString();
-                            socket.emit('equipSuccessful', res);
-                        } else {
-                            socket.emit('equipErrorBought');
-                        }
-                    }
-                break;
+            if(itemId == res.itemEquipped) {
+                return true;
+            } else {
+                if(item.includes(itemId)) {
+                    res.itemEquipped = itemId;
+                    res.itemEquippedCollection = data.collection;
+                    db.updateMongo(players,data,res);
+                    //res.fbId = myCrypto.encrypt(res.fbId).toString();
+                    res._id = myCrypto.encryptId(res._id);
+                    socket.emit('equipSuccessful', res);
+                } else {
+                    socket.emit('equipErrorBought');
+                }
             }
-            //}
-        }
+        break;
+        case 1:
 
-        //holiday
-        /*
-        for(i = 1; i < 4; i++) {
-            equipItem(i,res.itens.holiday[i]);
-        }*/
+            if(itemId == res.backgroundEquipped) {
+                return true;
+            } else {
+                if(item.includes(itemId)) {
+                    res.backgroundEquipped = itemId;
+                    db.updateMongo(players,data,res);
+                    //res.fbId = myCrypto.encrypt(res.fbId).toString();
+                    res._id = myCrypto.encryptId(res._id);
+                    socket.emit('equipSuccessful', res);
+                } else {
+                    socket.emit('equipErrorBought');
+                }
+            }
+        break;
+        case 2:
 
-        // data.itemId == 0 time reset
-        // data.itemId == 1 change nickname
-        // data.itemId == 2 touch power
+            if(itemId == res.slimeColorEquipped) {
+                return true;
+            } else {
+                if(item.includes(itemId)) {
+                    res.slimeColorEquipped = itemId;
+                    db.updateMongo(players,data,res);
+                    //res.fbId = myCrypto.encrypt(res.fbId).toString();
+                    res._id = myCrypto.encryptId(res._id);
+                    socket.emit('equipSuccessful', res);
+                } else {
+                    socket.emit('equipErrorBought');
+                }
+            }
+        break;
+    }
+    //}
+};
 
+const equipItem = (data, players, socket) => {
+
+    data._id = myCrypto.decryptId(data._id);
+
+    players.findOne({_id:data._id}, (err, resp) => {
+        if(err) throw err;
+        if(resp == null) return true;
+       
         if(data.collection == "holidayItems"){
 
-            equipItem(data.itemId,res.items.holiday,0);
+            equipItemF(resp, data, players, data.itemId,resp.items.holiday,0, socket);
         }
 
         //common items
 
         if(data.collection == "commonItems"){
 
-            //itemId = data.itemId - 2;
-
-            //for(i = 1; i < 19; i++) {
-                equipItem(data.itemId,res.items.common,0);
-            //}
+            equipItemF(resp, data, players, data.itemId,resp.items.common,0, socket);
         }
 
         // backgrounds
         if(data.collection == "backgrounds"){
 
-            //itemId = data.itemId - 19;
-
-            //for(i = 1; i < 19; i++) {
-                equipItem(data.itemId,res.backgrounds,1);
-            //}
+            equipItemF(resp, data, players, data.itemId,resp.backgrounds,1, socket);
         }
 
         // slime colors
         if(data.collection == "slimeColors"){
 
-            //itemId = data.itemId - 23;
-
-            //for(i = 1; i < 19; i++) {
-                equipItem(data.itemId,res.slimeColors,2);
-            //}
+            equipItemF(resp, data, players, data.itemId,resp.slimeColors,2, socket);
         }
     });
 };
+
+module.exports = equipItem;

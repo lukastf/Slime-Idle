@@ -1,15 +1,16 @@
 myCrypto = require('../myCrypto').myCrypto;
 db = require('../db').db;
 
-exports.checkAccount = function(data, players, socket){
+const checkAccount = (data, players, socket) => {
 
     if(data.fbId1 != null && data.fbId2 != null && data.fbId1 != undefined && data.fbId2 != undefined){
+
         data.fbId = myCrypto.decrypt2Pieces(data.fbId1, data.fbId2);
     } else {
         return true;
     }
 
-    players.findOne({fbId:data.fbId}, function(err, res){
+    players.findOne({fbId:data.fbId}, (err, res) => {
         if(err){
             throw err;
         }
@@ -18,6 +19,7 @@ exports.checkAccount = function(data, players, socket){
             if(data.nickname == null && data.password1 == null && data.password2 == null && data.name != "" && data.fbId != ""){
                 data.nickname = "";
                 data.password = "";
+                data.fbId = data.fbId;
                 db.insertMongo(players,data);
             } else {
                 return true;
@@ -37,3 +39,5 @@ exports.checkAccount = function(data, players, socket){
 
     });
 };
+
+module.exports = checkAccount;

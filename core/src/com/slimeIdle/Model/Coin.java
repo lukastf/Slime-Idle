@@ -25,8 +25,9 @@ public class Coin {
     public void buyCoins(Account acc, String transactionId, Socket socket){
         JSONObject enviar = new JSONObject();
         try {
-            enviar.put("fbId1", acc.id[0]);
-            enviar.put("fbId2", acc.id[1]);
+            //enviar.put("fbId1", acc.id[0]);
+            //enviar.put("fbId2", acc.id[1]);
+            enviar.put("_id", acc.getId());
             enviar.put("buyId", transactionId);
 
             socket.emit("buyCoins", enviar);

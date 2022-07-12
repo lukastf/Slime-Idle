@@ -13,14 +13,16 @@ public class Buttons {
     // textures
     public Texture buttons;
     public TextureRegion buttonLoginFace, buttonBattle, buttonPrev, buttonNext, buttonBuy, buttonEquip, buttonUnequip,
-            buttonCloseWindow, buttonMenu, buttonCart, buttonCoin, buttonTopLevel, buttonSlimeColor, buttonBackground, buttonLanguage;
+            buttonCloseWindow, buttonMenu, buttonCart, buttonCoin, buttonTopLevel, buttonSlimeColor, buttonBackground, buttonLanguage,
+            buttonSlimeItemsBought;
 
     public ArrayMap <String, Float> buttonCloseWindowProps = new ArrayMap<String, Float>(), buttonLoginFaceProps = new ArrayMap<String, Float>(),
             buttonCartProps = new ArrayMap<String, Float>(), buttonCoinProps = new ArrayMap<String, Float>(), buttonTopLevelProps = new ArrayMap<String, Float>(),
             buttonPrevProps = new ArrayMap<String, Float>(),buttonNextProps = new ArrayMap<String, Float>(),
             buttonEquipProps = new ArrayMap<String, Float>(), buttonUnequipProps = new ArrayMap<String, Float>(),
             buttonBuyProps = new ArrayMap<String, Float>(), buttonSlimeColorProps = new ArrayMap<String, Float>(),
-            buttonBackgroundProps = new ArrayMap<String, Float>(), buttonLanguageProps = new ArrayMap<String, Float>();
+            buttonBackgroundProps = new ArrayMap<String, Float>(), buttonLanguageProps = new ArrayMap<String, Float>(),
+            buttonSlimeItemsBoughtProps = new ArrayMap<String, Float>();
 
     public ArrayList<ArrayMap<String,Float>> buttonMenuProps = new ArrayList<ArrayMap<String, Float>>();
 
@@ -28,7 +30,8 @@ public class Buttons {
 
     public Rectangle buttonCloseCollision, buttonCartCollision, buttonCoinCollision, buttonTopLevelCollision,
             buttonLoginFaceCollision, buttonPrevCollision, buttonNextCollision, buttonUnequipCollision,
-            buttonEquipCollision, buttonBuyCollision, buttonSlimeColorCollision, buttonBackgroundCollision, buttonLanguageCollision;
+            buttonEquipCollision, buttonBuyCollision, buttonSlimeColorCollision, buttonBackgroundCollision, buttonLanguageCollision,
+            buttonSlimeItemsBoughtCollision;
 
     public ArrayList <Rectangle> buttonMenuCollision = new ArrayList<Rectangle>();
 
@@ -206,6 +209,16 @@ public class Buttons {
                 buttonLanguageProps.get("y"),
                 buttonLanguageProps.get("width"),
                 buttonLanguageProps.get("height"));
+    }
+
+    public void drawSlimeItemsBoughtBtn () {
+
+        Static.batch.draw(
+                buttonSlimeItemsBought,
+                buttonSlimeItemsBoughtProps.get("x"),
+                buttonSlimeItemsBoughtProps.get("y"),
+                buttonSlimeItemsBoughtProps.get("width"),
+                buttonSlimeItemsBoughtProps.get("height"));
     }
 
     public void dispose() {

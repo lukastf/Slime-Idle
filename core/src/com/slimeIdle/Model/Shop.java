@@ -109,8 +109,9 @@ public class Shop {
 
         JSONObject enviar = new JSONObject();
         try {
-            enviar.put("fbId1", acc.id[0]);
-            enviar.put("fbId2", acc.id[1]);
+            //enviar.put("fbId1", acc.id[0]);
+            //enviar.put("fbId2", acc.id[1]);
+            enviar.put("_id", acc.getId());
             enviar.put("itemId", item.getItemId());
             enviar.put("collection", item.getCollection());
 

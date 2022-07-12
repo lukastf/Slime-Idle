@@ -48,8 +48,10 @@ public class RenderSlime {
         btns.drawCartBtn();
         btns.drawCoinBtn();
         btns.drawTopLevelBtn();
-        btns.drawBackgroundBtn();
-        btns.drawSlimeColorBtn();
+        //btns.drawBackgroundBtn();
+        //btns.drawSlimeColorBtn();
+
+        btns.drawSlimeItemsBoughtBtn();
 
         //System.out.println("burg " + slime.touchScreenSecondsController2);
 

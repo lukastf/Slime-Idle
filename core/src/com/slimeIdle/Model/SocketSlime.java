@@ -45,9 +45,12 @@ public class SocketSlime {
     private Socket socket;
     {
         try {
-            //socket = IO.socket("http://192.168.15.35:8091");
+            socket = IO.socket("http://192.168.15.17:8091");
             //socket = IO.socket("https://slimeidle.com");
-            socket = IO.socket("http://157.230.83.239:8091");
+            // server
+            //socket = IO.socket("http://157.230.83.239:8091");
+            // test server
+            //socket = IO.socket("http://157.230.83.239:8091");
         } catch (Exception e) {
             System.out.println(e);
         }

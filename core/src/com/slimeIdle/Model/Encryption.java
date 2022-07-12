@@ -3,8 +3,8 @@ package com.slimeIdle.Model;
 public class Encryption {
 
     public com.slimeIdle.Model.AES AES = new AES();
-    private String encryptionKeyBase64 = "DJIzFkO22qfVMgX2fIsxOXNwz23pDBZfFJBvf4RS3eZ=";
-    private String ivBase64 = "AkkkMwikMkW4c7+mHtwtfw==";
+    private String encryptionKeyBase64 = "DJIzFkO22qfVMgX2fIsxOXNwz25pDBZfFJBvf4RS4eZ=";
+    private String ivBase64 = "AkxkMwikMkW4c7+mHtztfw==";
 
     public String getEncryptionKeyBase64() {
         return encryptionKeyBase64;

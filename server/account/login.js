@@ -1,15 +1,21 @@
 myCrypto = require('../myCrypto').myCrypto;
 db = require('../db').db;
 
-exports.login = function(data, players, socket){
+const login = (data, players, socket) => {
 
     if(data.password1 != null && data.password2 != null){
         data.password = myCrypto.decrypt2Pieces(data.password1, data.password2);
+
+        //console.log("pau no seu cu ");
+        //console.log(data.password2);
+        //console.log("password final ");
+        //console.log(data.password);
+
     } else {
         return true;
     }
 
-    players.findOne({nickname:data.nickname, password:data.password}, function(err, res){
+    players.findOne({nickname:data.nickname, password:data.password}, (err, res) => {
         if(err){
             throw err;
         }
@@ -23,7 +29,8 @@ exports.login = function(data, players, socket){
             // atualizar alguma coisa
             try {
                 res.password = myCrypto.encrypt(res.password).toString();
-                res.fbId = myCrypto.encrypt(res.fbId).toString();
+                //res.fbId = myCrypto.encrypt(res.fbId).toString();
+                res._id = myCrypto.encryptId(res._id);
                 
                 socket.emit('loginSuccessful', res);
                 return true;
@@ -36,3 +43,5 @@ exports.login = function(data, players, socket){
 
     });
 };
+
+module.exports = login;

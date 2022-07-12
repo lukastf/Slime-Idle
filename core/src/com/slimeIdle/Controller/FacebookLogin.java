@@ -89,7 +89,7 @@ public class FacebookLogin {
                 String fbIdForThisApp = root.getString("id");
                 //acc.setNome(fbName);
                 acc.setFbId(encr.encrypt(fbIdForThisApp));
-                acc.id = encr.encryptIn2(encr.decrypt(acc.getFbId()));
+                acc.fbIdArray = encr.encryptIn2(encr.decrypt(acc.getFbId()));
 
                 acc.getPrefs().putBoolean("firstLogin", true);
                 acc.getPrefs().flush();

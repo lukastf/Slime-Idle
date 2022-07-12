@@ -1,15 +1,17 @@
 myCrypto = require('../myCrypto').myCrypto;
 db = require('../db').db;
 
-exports.unequipItem = function(data, players, socket){
+const unequipItem = (data, players, socket) => {
 
-    if(data.fbId1 != null && data.fbId2 != null){
+    /*if(data.fbId1 != null && data.fbId2 != null){
         data.fbId = myCrypto.decrypt2Pieces(data.fbId1, data.fbId2);
     } else {
         return true;
-    }
+    }*/
 
-    players.findOne({fbId:data.fbId}, function(err, res){
+    data._id = myCrypto.decryptId(data._id);
+
+    players.findOne({_id:data._id}, (err, res) => {
         if(err){
             throw err;
         }
@@ -28,7 +30,8 @@ exports.unequipItem = function(data, players, socket){
                 res.itemEquipped = res.items.unequipped;
                 res.itemEquippedCollection = "";
                 db.updateMongo(players,data,res);
-                res.fbId = myCrypto.encrypt(res.fbId).toString();
+                //res.fbId = myCrypto.encrypt(res.fbId).toString();
+                res._id = myCrypto.encryptId(res._id);
                 socket.emit('unequipSuccessful', res);
             }
         }
@@ -41,7 +44,8 @@ exports.unequipItem = function(data, players, socket){
             } else {
                 res.backgroundEquipped = res.items.unequipped;
                 db.updateMongo(players,data,res);
-                res.fbId = myCrypto.encrypt(res.fbId).toString();
+                //res.fbId = myCrypto.encrypt(res.fbId).toString();
+                res._id = myCrypto.encryptId(res._id);
                 socket.emit('unequipSuccessful', res);
             }
         }
@@ -54,10 +58,13 @@ exports.unequipItem = function(data, players, socket){
             } else {
                 res.slimeColorEquipped = res.items.unequipped;
                 db.updateMongo(players,data,res);
-                res.fbId = myCrypto.encrypt(res.fbId).toString();
+                //res.fbId = myCrypto.encrypt(res.fbId).toString();
+                res._id = myCrypto.encryptId(res._id);
                 socket.emit('unequipSuccessful', res);
             }
         }
 
     });
 };
+
+module.exports = unequipItem;

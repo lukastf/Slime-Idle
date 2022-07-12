@@ -8,7 +8,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.slimeIdle.Controller.CommonLogin;
 import com.slimeIdle.Controller.FacebookLogin;
 import com.slimeIdle.Controller.InputListener;
-import com.slimeIdle.Controller.Loader;
+import Loader;
 import com.slimeIdle.Controller.PurchaseObserver;
 import com.slimeIdle.Controller.TouchScreen;
 import com.slimeIdle.Model.Account;

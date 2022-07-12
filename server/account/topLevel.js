@@ -1,4 +1,5 @@
-exports.topLevel = function(data, players, socket){
+
+const topLevel = (data, players, socket) => {
     topLevelRes = players.find({}, 
         {"nickname":1, 
         "level":1, 
@@ -6,7 +7,7 @@ exports.topLevel = function(data, players, socket){
         "slimeColorEquipped":1,
         "backgroundEquipped":1,
         "_id":0
-    }).sort({ level: -1 }).limit(20).toArray(function(err, res){
+    }).sort({ level: -1 }).limit(20).toArray((err, res) => {
         if(err){
             throw err;
         }
@@ -19,3 +20,5 @@ exports.topLevel = function(data, players, socket){
         socket.emit('topLevelRes', res);
     });
 };
+
+module.exports = topLevel;

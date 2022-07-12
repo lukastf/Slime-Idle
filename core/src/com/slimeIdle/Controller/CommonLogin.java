@@ -17,11 +17,12 @@ public class CommonLogin {
     }
 
     public void getAutoLogin(){
-        if(!acc.isAutoLoginFinished() && !acc.getPrefs().getString("fbId").isEmpty()){
+        if(!acc.isAutoLoginFinished() && !acc.getPrefs().getString("_id").isEmpty()){
             acc.setAutoLoginFinished(true);
             //acc.setNome(acc.getPrefs().getString("name"));
+            acc.setId(acc.getPrefs().getString("_id"));
             acc.setFbId(acc.getPrefs().getString("fbId"));
-            acc.id = encr.encryptIn2(encr.decrypt(acc.getFbId()));
+            //acc.id = encr.encryptIn2(encr.decrypt(acc.getFbId()));
             acc.setNickname(acc.getPrefs().getString("nickname"));
             acc.setPassword(acc.getPrefs().getString("password"));
             acc.pass = encr.encryptIn2(encr.decrypt(acc.getPassword()));
